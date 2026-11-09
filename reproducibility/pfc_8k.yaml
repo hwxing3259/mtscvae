@@ -1,0 +1,10 @@
+# PFC matched-size benchmark fits (paper Fig 2, PFC column): 8,000 nuclei per
+# modality, seeds 22, 44 and 88. Each run is `python -m mtvae.fit --config <config>
+# --seed <s>`; it writes the fit folder models/pfc_8k/s<seed> of the figshare item.
+name: pfc_8k
+config: mtvae/configs/pfc_8k.yaml
+runs:
+  - {seed: 22}
+  - {seed: 44}
+  - {seed: 88}
+folder: pfc_8k/s{seed}

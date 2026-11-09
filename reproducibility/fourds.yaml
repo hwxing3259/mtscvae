@@ -1,0 +1,19 @@
+# Four-dataset benchmark fits (paper Fig 2): HC, HO, DR, MN x seeds 0, 1, 2.
+# Each run is `python -m mtvae.fit --config <config> --dataset <DS> --seed <s>`;
+# it writes the fit folder models/fourds/<DS>/s<seed> of the figshare item.
+name: fourds
+config: mtvae/configs/fourds.yaml
+runs:
+  - {dataset: HC, seed: 0}
+  - {dataset: HC, seed: 1}
+  - {dataset: HC, seed: 2}
+  - {dataset: HO, seed: 0}
+  - {dataset: HO, seed: 1}
+  - {dataset: HO, seed: 2}
+  - {dataset: DR, seed: 0}
+  - {dataset: DR, seed: 1}
+  - {dataset: DR, seed: 2}
+  - {dataset: MN, seed: 0}
+  - {dataset: MN, seed: 1}
+  - {dataset: MN, seed: 2}
+folder: fourds/{dataset}/s{seed}

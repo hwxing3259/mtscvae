@@ -1,0 +1,314 @@
+# PFC full-atlas fits (paper Fig 3, tutorial) -- every knob, example='pfc'.
+#
+# Generated from PipelineConfig, so the values are what would run. The
+# example's recipe alone is written by:
+#   python -m mtvae.config --example pfc
+#
+# Partial files are fine: delete everything you are not changing, and
+# the rest comes from the example's recipe. Unknown keys raise an error.
+#
+# `lr`, `encoder_lr` and `log_every` exist under both `vae:` (Stage A)
+# and `sde:` (Stage B) and are different settings.
+
+# which recipe to start from: fourds | pfc. For new data, start from the
+# closer one and override.
+example: pfc
+
+# one seed. Stage A seeds from it; Stage B re-seeds from it.
+seed: 0
+
+# "cuda" | "cpu".
+device: cuda
+
+# staged_equivalent: the random-number sequence of the released fits; it
+# replays three module constructions before the SDE is built. reseed: skips
+# them; every Stage-B number then differs.
+rng_protocol: staged_equivalent
+
+
+# ========================================================================
+# DATA -- input clipping, training split, row subset
+# ========================================================================
+
+data:
+  # symmetric input bound per modality, {rna: ..., atac: ...}; null =
+  # unclipped. Applied when the data are read.
+  clip: {"rna": null, "atac": 10.0}
+
+  # fit on the example's training split (PFC: the whole-donor split in
+  # wholedonor_train_mask.npz) and encode every cell.
+  train_mask: true
+
+  # fit on the first n_rows rows of each modality's order in bench_tiers.npz
+  # (the PFC benchmark tiers); null = all rows.
+  n_rows: null
+
+
+# ========================================================================
+# ARCHITECTURE -- which trunk each slot gets
+# ========================================================================
+
+arch:
+  # "mlp" | "spatial" | "conv": the encoder trunk of slot 0. Slot names are
+  # the model's, not the dataset's.
+  rna_encoder: mlp
+
+  # "mlp" | "spatial" | "conv": the encoder trunk of slot 1. "spatial" is the
+  # chromosome-aware Conv1d (PFC); it needs a peak list giving each feature's
+  # chromosome. "conv" is the same trunk without the chromosome boundaries and
+  # needs no peak list. The trunk also decides where the Stage-B SDE
+  # initialises.
+  atac_encoder: spatial
+
+  # kernel width of a spatial or conv trunk; must match Stage A.
+  spatial_kernels: 3
+
+
+# ========================================================================
+# STAGE A -- the multimodal VAE
+# ========================================================================
+
+vae:
+  # "joint" | "staged". The paper uses joint; staged pretrains each
+  # autoencoder first and uses the p1_* knobs.
+  mode: joint
+
+  # reuse cached pretrained autoencoders (staged mode only).
+  phase1_dir: null
+
+  # RNA pretraining iterations (staged mode only).
+  p1_rna_iters: 2000
+
+  # ATAC pretraining iterations (staged mode only).
+  p1_atac_iters: 4000
+
+  # RNA pretraining learning rate (staged mode only).
+  p1_rna_lr: 0.001
+
+  # ATAC pretraining learning rate (staged mode only).
+  p1_atac_lr: 0.0005
+
+  # pretraining batch size (staged mode only).
+  p1_batch: 512
+
+  # Stage-A iterations: 6000 four-dataset, 3000 PFC.
+  n_iters: 3000
+
+  # cells per modality per step.
+  batch_size_per_modality: 512
+
+  # fusion-head learning rate (not sde.lr).
+  lr: 0.0005
+
+  # trunk and decoder learning rate in staged mode; unused in joint mode,
+  # where joint_lr covers every parameter. Not sde.encoder_lr.
+  encoder_lr: 0.0001
+
+  # learning rate of every parameter, joint mode.
+  joint_lr: 0.0005
+
+  # reconstruction-only iterations before the other terms switch on.
+  joint_warmup_iters: 0
+
+  # global gradient-norm clip.
+  grad_clip: 5.0
+
+  # weight of the per-stage sliced-Wasserstein cross-modal matching. Interacts
+  # with lambda_topo_atac: tune the two together.
+  beta_sw: 0.5
+
+  # cells per stage in the sliced-Wasserstein term.
+  sw_batch_per_stage: 64
+
+  # random projections in the sliced-Wasserstein term.
+  sw_n_projections: 64
+
+  # weight of the RNA neighbourhood tilt toward its teacher. Larger values
+  # sharpen RNA clusters at the cost of cross-modal alignment.
+  lambda_topo_rna: 0.01
+
+  # weight of the ATAC neighbourhood tilt toward its teacher; see beta_sw.
+  lambda_topo_atac: 0.1
+
+  # cells per tilt evaluation.
+  topo_batch: 512
+
+  # openTSNE perplexity of the teacher affinities.
+  topo_perplexity: 30.0
+
+  # "full" | "batch". "full" computes the teacher affinities once over all
+  # cells; openTSNE draws from numpy's global random state there, so pin
+  # openTSNE (1.0.4) for exact reproduction.
+  topo_affinity: full
+
+  # latent dimensions excluded from the tilt.
+  topo_identity_dims: 0
+
+  # weight of the Stage-A prior KL: 5e-3 four-dataset, 3e-2 PFC. Not
+  # sde.beta_kl.
+  beta_kl: 0.03
+
+  # "mind" (divided by n_cells * latent_dim) | "elbo" (per-sample sum).
+  kl_scale: mind
+
+  # per-dimension KL floor in nats; guards against posterior collapse.
+  kl_free_bits: 0.0
+
+  # 0 = all dimensions stochastic; k = only the first k.
+  kl_dims: 0
+
+  # "learned" | "fixed" posterior sigma.
+  sigma_mode: learned
+
+  # initial posterior sigma. Latents are exported as posterior means.
+  sigma_init: 0.1
+
+  # z = mu, i.e. no stochastic bottleneck (an autoencoder rather than a VAE).
+  deterministic: false
+
+  # "sample" | "mu": which latent the tilt sees.
+  tilt_on: sample
+
+  # "sample" | "mu": which latent the sliced-Wasserstein term sees.
+  sw_on: sample
+
+  # architecture of the shared fusion layer.
+  fusion_arch: shared
+
+  # fusion width (1024 in both examples).
+  fusion_hidden_dim: 1024
+
+  # fusion depth.
+  fusion_depth: 1
+
+  # residual scale of the fusion. A plain attribute, not saved in the state
+  # dict: a checkpoint must be rebuilt with the value it was trained with.
+  fusion_residual_scale: 0.5
+
+  # layer norm inside the fusion.
+  fusion_layer_norm: false
+
+  # latent dimension (50 in both examples).
+  latent_dim: 50
+
+  # Stage-A logging interval.
+  log_every: 100
+
+
+# ========================================================================
+# STAGE B -- the latent SDE objective
+# ========================================================================
+
+sde:
+  # weight of the latent dynamics alignment.
+  alpha_align: 1.0
+
+  # weight of the chained (one rollout through all stages) alignment.
+  lambda_chained: 1.0
+
+  # weight of the pairwise (one stage to the next) alignment.
+  lambda_per_pair: 2.0
+
+  # weight of the reconstruction term.
+  lambda_rec: 1.0
+
+  # weight of the feature-level Sinkhorn match of decoded and observed
+  # cohorts: 0.01 four-dataset, 0.1 PFC.
+  lambda_dist: 0.1
+
+  # weight of the penalty holding the decoders near their Stage-A weights.
+  lambda_prox: 1.0
+
+  # weight of the penalty holding the encoder's latents near the Stage-A
+  # latents. 0 leaves the latent space unanchored.
+  lambda_latent_anchor: 1.0
+
+  # weight of the SDE path KL, 0.5 * int |f_post / g|^2 dt against a zero
+  # prior drift, over chained and pairwise rollouts (1e-4 in the paper; 0
+  # switches it off). Not vae.beta_kl. In YAML write 1.0e-4: PyYAML reads 1e-4
+  # as a string (it is converted, but be explicit).
+  beta_kl: 0.0001
+
+  # [start, end] iterations of the linear path-KL ramp: 0 before start,
+  # beta_kl from end.
+  kl_warmup: [200, 400]
+
+  # cells per alignment step.
+  batch_align: 256
+
+  # cells per reconstruction step.
+  batch_rec: 256
+
+  # cells per feature-level matching step.
+  batch_dist: 256
+
+  # cells per anchor evaluation.
+  batch_anchor: 256
+
+  # Stage-B iterations.
+  train_iters: 3000
+
+  # Stage-B warmup iterations.
+  warmup_iters: 200
+
+  # learning rate of the SDE (not vae.lr).
+  lr: 0.0005
+
+  # learning rate of the decoders while they co-adapt (1e-5). 0 freezes them.
+  decoder_lr: 1.0e-05
+
+  # learning rate of the encoder while it co-adapts with the SDE (1e-5). 0
+  # freezes the encoder.
+  encoder_lr: 1.0e-05
+
+  # rescale latents before the latent Sinkhorn divergence.
+  scaled_z_sinkhorn: true
+
+  # entropic regularisation of the feature-level Sinkhorn.
+  sinkhorn_eps_x: 0.05
+
+  # iterations of the feature-level Sinkhorn.
+  sinkhorn_iters_x: 20
+
+  # use the original rescaled Sinkhorn divergence, which can reward a
+  # collapsed cohort. False (the default) uses the corrected divergence.
+  shipped_divergence: false
+
+  # Stage-B logging interval (not vae.log_every).
+  log_every: 50
+
+  # per-modality clip of the reconstruction targets, as {modality: value};
+  # null = none. The encoder sees the unclipped input, so a target clip
+  # tighter than the input clip changes what is learned.
+  target_clip: {"rna": 10.0, "atac": 10.0}
+
+
+# ========================================================================
+# STAGE B -- SDE network geometry
+# ========================================================================
+
+geom:
+  # SDE prior.
+  prior_mode: zero
+
+  # "scalar" | other diffusion parameterisations.
+  diffusion_mode: scalar
+
+  # drift network hidden sizes, e.g. [128, 128].
+  drift_hidden: [128, 128]
+
+  # diffusion network hidden sizes.
+  diffusion_hidden: [32]
+
+  # Fourier time-embedding output width.
+  time_embed_dim: 4
+
+  # Fourier time-embedding hidden width.
+  time_hidden: 10
+
+  # initial diffusion scale.
+  diffusion_init: 0.02
+
+  # SDE integration step.
+  dt_step: 0.01
+

@@ -1,0 +1,10 @@
+# PFC full-atlas fits (paper Fig 3; the tutorial uses seed 44): seeds 22, 44, 88.
+# Each run is `python -m mtvae.fit --config <config> --seed <s>`; it writes the fit
+# folder models/pfc_full/s<seed> of the figshare item.
+name: pfc_full
+config: mtvae/configs/pfc.yaml
+runs:
+  - {seed: 22}
+  - {seed: 44}
+  - {seed: 88}
+folder: pfc_full/s{seed}
