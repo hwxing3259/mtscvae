@@ -94,7 +94,7 @@ rare-type values of record are kept at 6 dp, so they are compared to 5e-7.
 * **`benchmark/scores/<folder>/`** holds the per-fit score records of record, which carry the nulls
   and diagnostics too.
 * **`benchmark/scores/rare_type_fourds.csv`** holds the four-dataset rare-type values.
-* **`benchmark/manifest.csv`** lists every embedding with its md5 and what its rows are.
+* **`benchmark/manifest.csv`** lists every embedding and what its rows are.
 
 The means over seeds of `scores.csv` give the bars of Fig 2 (`grid_values.csv`) and of Fig 3a
 (`8k_vs_full_values.csv`).
@@ -107,7 +107,7 @@ each with a `<stem>.json` beside it: run time, device and hyperparameters.
   uniPort) were run by `snr_run_method.py`, at its `BASELINE_HPARAMS`. Those are the methods'
   wrapper defaults, under scMultiNODE's experimental configuration, with a 50-d output.
   There is one exception: HO Pamona and UnionCom are scMultiNODE's own published latents
-  (see above). Their `<stem>.json` gives the source file and its md5 instead of a run.
+  (see above). Their `<stem>.json` gives the source file instead of a run.
 * **scMultiNODE** used its per-dataset settings. On PFC it used its human-cortex (HC) settings.
 * **Fits per method.**
   * Four datasets: scMultiNODE 5 seeds (4 on DR), uniPort 5, the others 1.
@@ -118,8 +118,7 @@ each with a `<stem>.json` beside it: run time, device and hyperparameters.
 Run the notebooks from this folder. `MTVAE_DATA` points at the figshare folder, and
 `MTVAE_FIG_OUT` (optional) is where the PNG and SVG are written; the default is a temporary
 folder. Each notebook reads only its `figures/` subfolder and draws with the modules in
-`figures/`, without changing them. Rendered with matplotlib 3.11.1, both PNGs are byte-identical
-to the paper's.
+`figures/`, without changing them. The figures were rendered with matplotlib 3.11.1.
 
 ## Read with care
 
