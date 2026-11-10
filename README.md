@@ -48,13 +48,13 @@ Paper: *link to be added*.  Data and trained models: figshare, *DOI to be added*
 ### Installation guide
 
 ```bash
-pip install git+https://github.com/hwxing3259/mtvae.git
+pip install git+https://github.com/hwxing3259/mtscvae.git
 ```
 
 or, for the pinned environment of the paper:
 
 ```bash
-git clone https://github.com/hwxing3259/mtvae.git && cd mtvae
+git clone https://github.com/hwxing3259/mtscvae.git && cd mtscvae
 conda env create -f environment.yml && conda activate mtvae
 ```
 
