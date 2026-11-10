@@ -146,6 +146,10 @@ astrocyte markers, checked against the paper's numbers.
 * `Dataset.stage_times`: normalised times of the stages in [0, 1]
   (`mtvae.stage_times_from` derives them from per-cell ages).
 
+**Teacher embeddings.** For the tilt, pass a low-dimensional embedding of each modality, such
+as a 100-d PCA of the normalised RNA or an LSI of the ATAC peaks, rather than the feature
+matrix itself; the pipeline builds the neighbour affinities from it.
+
 **You get back:**
 
 * a shared 50-dimensional latent per cell;

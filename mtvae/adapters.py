@@ -145,8 +145,7 @@ def pfc(data_dir: Path, *, stages: tuple, atac_teacher: Optional[Path] = None,
         The stage order. Passed explicitly because lexical order of the stage
         names is not developmental order.
     atac_teacher : pathlib.Path, optional
-        Defaults to ``atac_harmony_100d.npy`` (a Harmony-corrected embedding;
-        a plain PCA teacher does not preserve the astrocyte result).
+        Defaults to ``atac_teacher_lsi.npy``.
     rna_teacher : pathlib.Path, optional
         Defaults to ``rna_teacher_pca.npy``.
     train_mask : pathlib.Path, optional
@@ -193,7 +192,7 @@ def pfc(data_dir: Path, *, stages: tuple, atac_teacher: Optional[Path] = None,
 
     tea = {}
     for m, given, default in (("rna", rna_teacher, "rna_teacher_pca.npy"),
-                              ("atac", atac_teacher, "atac_harmony_100d.npy")):
+                              ("atac", atac_teacher, "atac_teacher_lsi.npy")):
         tp = Path(given) if given else (data_dir / default)
         if not tp.exists():
             raise FileNotFoundError(
