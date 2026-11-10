@@ -1,27 +1,5 @@
 """Swap the Stage-A ATAC trunk for the chromosome-aware Conv1d trunk.
-
-:func:`spatial_atac_trunk` is a context manager that, for the duration of one
-:func:`mtvae.stage_a.trainer.train_merged` call, replaces the ATAC
-:class:`~mtvae.nn.autoencoders.ModalityAutoencoder` built in joint mode with a
-:class:`~mtvae.nn.atac_spatial_encoder.SpatialModalityAutoencoder`. It is an
-alternative to declaring ``TrunkSpec("spatial", chr_ids=...)`` on the ATAC
-modality (:mod:`mtvae.nn.trunks`), which is the route the pipeline uses. The
-module also re-exports :func:`load_chromosome_ids`.
-
-The swap rebinds the name ``ModalityAutoencoder`` in
-:mod:`mtvae.stage_a.trainer` and restores it on exit. It relies on the trainer
-building the RNA trunk first and the ATAC trunk second; since both modalities
-can have the same feature count, this order is checked explicitly:
-:func:`assert_trunk_contract` hashes the trunk-construction source block, and
-the context manager checks that exactly two trunks were built and that the
-replaced one received the ATAC feature count.
-
-Seeding: ``train_merged`` seeds torch before building the trunks, and the
-spatial trunk draws a different number of random values than the MLP trunk, so
-every parameter initialised after it (including the fusion layer) differs from
-an MLP-trunk fit at the same seed. Compare the two trunk types across seeds,
-not within one.
-"""
+An alternative to ``TrunkSpec("spatial", chr_ids=...)``, the route the pipeline uses."""
 from __future__ import annotations
 
 import contextlib

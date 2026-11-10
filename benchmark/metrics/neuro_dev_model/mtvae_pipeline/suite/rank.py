@@ -1,26 +1,4 @@
-"""Effective rank — one implementation, pure numpy.
-
-Replaces eight byte-equivalent copies that had drifted apart in name only:
-``eff_rank`` in ``data/stage_score.py``, ``pfc/bench/metrics.py``,
-``pfc/build_teachers.py``, ``pfc/run_pfc_vae.py`` and ``validation/audit_runs.py``;
-``_eff_rank`` in ``vae/run_vae_merged.py`` and ``data/snr_prepare_ours.py``;
-``participation_ratio`` in ``vae/losses.py``. Verified bit-equal across all eight
-on the shipped latents and the Harmony teacher before consolidating.
-
-**Pure numpy, deliberately.** This module must be importable by the torch-free
-scorers -- see ``suite/__init__``. It is also why the consolidation points this
-way round: the guarded implementation lived in ``vae/losses.py``, which imports
-torch, so moving the *callers* there was not an option.
-
-The guard is the one thing that was not universal: only ``vae/losses.py`` checked
-``denom > 0``. It is kept here, so a degenerate all-zero embedding returns
-``nan`` rather than raising -- ``0/0`` in numpy is a warning, not an exception,
-and a silent ``nan`` propagating into a metrics table is worse than an explicit
-one.
-
-NOT the same as ``dynamics/trainer.participation_ratio``, which takes a
-``torch.Tensor`` inside the training loop and is deliberately left alone.
-"""
+"""Effective rank — one implementation, pure numpy."""
 from __future__ import annotations
 
 import numpy as np

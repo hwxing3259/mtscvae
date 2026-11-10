@@ -1,13 +1,5 @@
 """Read the examples and the trained models from the figshare layout.
-
-Every path is relative to one data root: the unzipped figshare item, passed as an
-argument or through the ``MTVAE_DATA`` environment variable::
-
-    <data_root>/data/pfc/                    PFC inputs
-    <data_root>/data/fourds/{HC,HO,DR,MN}/   four-dataset inputs
-    <data_root>/models/pfc_full/s<seed>/     PFC fits (seeds 22, 44, 88)
-    <data_root>/models/fourds/<DS>/s<seed>/  four-dataset fits (seeds 0, 1, 2)
-"""
+Every path is relative to one data root, passed as an argument or through ``MTVAE_DATA``."""
 from __future__ import annotations
 
 import dataclasses

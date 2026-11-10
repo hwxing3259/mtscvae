@@ -1,44 +1,5 @@
 """Fit both stages of mtvae for one seed, from a YAML config.
-
-Runs Stage A (the two-modality VAE) and Stage B (the latent SDE, co-adapting
-the encoder and both decoders) on one example and writes model.pt, latents/,
-stage_a.pt, stage_a_latents.npz and run_record.json to <out-root>/<arm>/.
-
-examples:
-
-  # PFC atlas, both stages, seed 44 (the recipe of the released fits)
-  python -m mtvae.fit --config configs/pfc.yaml --seed 44 \\
-      --data-root $MTVAE_DATA --arm pfc_s44 --out-root runs/
-
-  # one of the four benchmark datasets
-  python -m mtvae.fit --config configs/fourds.yaml --dataset HC --seed 0 \\
-      --data-root $MTVAE_DATA --arm HC_s0 --out-root runs/
-
-configuration:
-  The config file holds every setting of a run: the data handling (data:
-  input clipping, training split, row subset), the trunks (arch:), Stage A
-  (vae:), the Stage-B objective (sde:) and the SDE geometry (geom:). Unset
-  keys come from the example's recipe (mtvae.pipeline.EXAMPLES); write a
-  commented reference with `python -m mtvae.config --example pfc --out x.yaml`.
-  Hyperparameter flags given alongside --config take precedence. The resolved
-  configuration is stored in the run record (hyperparameters), from which
-  PipelineConfig.from_blob rebuilds it.
-
-data:
-  --data-root (default $MTVAE_DATA) is the figshare data root; the example is
-  read from <data-root>/data/pfc or <data-root>/data/fourds/<dataset>.
-
-stages:
-  One run fits Stage A, hands it to Stage B in memory and fits Stage B. The
-  Stage-A snapshot taken before Stage B is written beside the final model
-  (stage_a.pt, stage_a_latents.npz; --no-save-stage-a skips them).
-
-RNG:
-  --rng-protocol staged_equivalent (default) is the random-number sequence of
-  the released fits: before the SDE is built it replays five module
-  constructions (two trunks, the fusion, two decoder autoencoders); reseed
-  skips them, which changes every Stage-B number (see mtvae.stage_b.handoff).
-"""
+Writes model.pt, latents/, the Stage-A snapshot and run_record.json to <out-root>/<arm>/."""
 from __future__ import annotations
 
 import argparse

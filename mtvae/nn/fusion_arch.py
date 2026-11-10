@@ -1,26 +1,5 @@
 """Fusion layers that map each modality's encoder output into the shared latent.
-
-Every fusion here
-
-* takes ``(z, modality)``, so shared and per-modality variants are
-  interchangeable at the call site, and
-* initialises to the identity map (the residual branch's output layer is
-  zero-initialised), so all variants start from the same function.
-
-Available architectures, by :func:`make_fusion` name:
-
-``"shared"``
-    One residual refinement ``z + s * net(z)`` applied to both modalities
-    (:class:`SharedFusion`, the default).
-``"per_mod"``
-    An independent refinement per modality (:class:`PerModalityFusion`).
-``"shared_private"``
-    A shared refinement followed by a narrow per-modality correction
-    (:class:`SharedPrivateFusion`).
-``"per_mod_linear"``
-    A per-modality affine map, identity-initialised
-    (:class:`PerModalityLinearFusion`).
-"""
+Each takes ``(z, modality)`` and starts as the identity; :func:`make_fusion` builds one by name."""
 from __future__ import annotations
 
 from typing import Literal

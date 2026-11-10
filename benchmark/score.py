@@ -1,48 +1,5 @@
 """Score benchmark embeddings with the scorer of record.
-
-Each embedding is a file of the figshare layout,
-``<figshare>/benchmark/embeddings/<folder>/<Method>_s<seed>[_n<subsample>].npz``, holding
-``rna`` and ``atac`` arrays (cells x 50). ``<folder>`` is HC, HO, DR, MN, PFC_8k or
-PFC_full. Each one is scored exactly as the published scores were, and the seven endpoints are written to
-``<out-dir>/<folder>/<stem>.json``:
-
-* **HC, HO, DR, MN.** First the four-dataset scorer of record runs as its own process::
-
-      python -m neuro_dev_model.mtvae_4ds_coadapt.data.snr_score --dataset DS
-          --method M --seed S [--subsample N] --runs-dir <folder> --out-dir <tmp> --force
-
-  Its stochastic steps are seeded with the fit's seed. Then the two rare-type endpoints
-  are added: scMultiNODE's rule, through ``neuro_dev_model.mtvae.data.snr_rare_population``,
-  as ``four_data_bench_results/bench_emb/run_benchmark.py`` adds them. These datasets need
-  scMultiNODE's processed data (figshare doi 10.6084/m9.figshare.27420657.v2, ``data.zip``),
-  unpacked so that ``<root>/data/<dataset folder>/reduce_processed/`` exists. Pass that root
-  as ``--snr-data-root`` or in ``SNR_DATA_ROOT``.
-* **PFC_8k, PFC_full.** The PFC scorer of record runs as its own process::
-
-      python -m neuro_dev_model.pfc_scaling_bench.score --tag <Method>_<tier>_s<seed> --force
-
-  It runs on a staging folder that holds the embedding, a minimal fit record and the tier
-  permutation. It scores rows ``[:8000]`` of each modality, the evaluation draw E: the
-  8,000 nuclei per modality of the matched tier (``PFCSB_N_EVAL``). From
-  ``<figshare>/data/pfc/`` it reads only three files:
-
-  * ``bench_tiers.npz`` (``perm_rna``, ``perm_atac``);
-  * ``rna_metadata.csv`` (``barcode``, ``major_clust``, ``stage_id``, ``donor_id``);
-  * ``atac_metadata.csv`` (``barcode``, ``predicted_group``, ``stage_id``, ``donor_id``).
-
-The scorer modules are copies of the scorer of record in ``metrics/`` (md5s in
-``metrics/MD5SUMS``); only machine paths in strings are given as home folders. The
-scorer needs its pinned environment: numpy, scipy, pandas, scikit-learn, scanpy, anndata,
-igraph, leidenalg and dcor. This script itself needs only numpy and pandas. Use
-``--compare`` to check a result against ``benchmark/scores.csv``.
-
-Examples, run from the repository root::
-
-    export MTVAE_DATA=../figshare SNR_DATA_ROOT=<scMultiNODE data root>
-    python benchmark/score.py $MTVAE_DATA/benchmark/embeddings/HC/Ours_s0.npz
-    python benchmark/score.py $MTVAE_DATA/benchmark/embeddings/PFC_8k/*.npz \\
-        --compare $MTVAE_DATA/benchmark/scores.csv
-"""
+Example: ``python benchmark/score.py $MTVAE_DATA/benchmark/embeddings/HC/Ours_s0.npz``."""
 from __future__ import annotations
 
 import argparse

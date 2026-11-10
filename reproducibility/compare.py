@@ -1,17 +1,5 @@
 """Compare a refitted model folder with a released one, tensor for tensor.
-
-Reads ``model.pt`` (or ``dynamics.pt``) and ``latents/z_coadapt_*.npy`` from both
-folders, and ``stage_a.pt`` and ``stage_a_latents.npz`` when both have them, and
-reports, per tensor, whether it is bit-identical and the largest absolute
-difference. There is no tolerance.
-
-Run::
-
-    python reproducibility/compare.py <refit dir> <released dir> [--out verdict.json]
-
-Exit code 0 = every tensor and latent identical, 3 = something differs, 1 = the
-two folders are not comparable (missing keys or shapes).
-"""
+Exit 0 = all identical, 3 = something differs, 1 = not comparable; there is no tolerance."""
 from __future__ import annotations
 
 import argparse

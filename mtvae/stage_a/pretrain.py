@@ -1,11 +1,5 @@
 """Per-modality autoencoder pre-training.
-
-:func:`train_modality_ae` fits one
-:class:`~mtvae.nn.autoencoders.ModalityAutoencoder` by reconstruction (MSE or
-Huber) with Adam, holding out a validation fraction. Stage A uses it in
-``staged`` mode to pre-train the trunks before the fused model is trained.
-Mini-batches are drawn by sampling integer row indices, with no DataLoader.
-"""
+Stage A uses it in ``staged`` mode to pre-train the trunks before the fused model."""
 from __future__ import annotations
 
 import logging

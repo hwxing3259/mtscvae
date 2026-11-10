@@ -1,37 +1,5 @@
 """Stage-A training: the two-modality VAE with a shared latent.
-
-:func:`train_merged` fits a :class:`~mtvae.stage_a.model.MergedVAE` in one of
-two modes:
-
-``mode="staged"``
-    The trunks are first fitted on reconstruction alone (or loaded from a
-    cache), then the stochastic fusion head is inserted and everything is
-    fine-tuned under the full objective. The head is identity-initialised, so
-    training starts from exactly the pre-trained function.
-``mode="joint"``
-    One network, one optimiser, the full objective from step 0, no
-    pre-training.
-
-The objective is the same in both modes::
-
-    L = recon_rna + recon_atac
-      + beta_sw          * mean_over_stages SW2(z_rna|s, z_atac|s)
-      + lambda_topo_rna  * tilt(z_rna)
-      + lambda_topo_atac * tilt(z_atac)
-      + beta_kl          * KL(q(z|x) || N(0, I))
-
-By default the reconstruction, the sliced-Wasserstein term and the tilt are
-evaluated on the reparameterised sample, as in the MIND reference
-implementation. ``beta_kl = 0`` with ``deterministic = True`` gives the
-deterministic fused autoencoder with otherwise identical settings.
-
-Reconstruction batches are drawn uniformly per modality; the
-sliced-Wasserstein term draws equal-size batches per stage from both
-modalities; each tilt term draws its own batch.
-
-:func:`extract_latents` encodes every cell, and :func:`run_record` assembles a
-JSON-serialisable summary of a fit.
-"""
+:func:`train_merged` fits it in ``"staged"`` or ``"joint"`` mode, under the same objective."""
 from __future__ import annotations
 
 import logging

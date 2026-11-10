@@ -1,25 +1,5 @@
 """Fixed design of the PFC scaling benchmark.
-
-Every number that decides what is run, on which cells, and when a method is
-declared infeasible lives here, so that the scheduler, the runners and the
-aggregator cannot disagree about it.  Paths come from the environment (with
-defaults read from ``config/paths.yml``), never from literals elsewhere.
-
-The design in one paragraph
----------------------------
-The pool is the whole-donor TRAINING split (117,932 RNA / 64,011 ATAC nuclei),
-the cells our adopted fits are trained on.  One random permutation per modality
-(seed :data:`PERM_SEED`) orders the pool; tier ``N`` is the first ``N`` cells of
-that permutation, so tiers are NESTED and every tier contains the evaluation
-draw ``E`` = the first :data:`N_EVAL` cells of each modality.  Every method is
-fitted on a tier and every fit is scored on the same ``E``, so a difference
-between two scores is a difference between methods or training-set sizes, never
-between evaluation cells.  A method climbs the tiers until the projected wall
-time of the next tier exceeds :data:`CAP_FACTOR` times our own fit time, or
-its projected memory exceeds the memory budget; that is its feasibility
-frontier.  Tiers are climbed breadth-first: every method's small tiers before
-anyone's large ones.
-"""
+Tiers are nested prefixes of one permutation; every fit is scored on its first ``N_EVAL`` cells."""
 from __future__ import annotations
 
 import os

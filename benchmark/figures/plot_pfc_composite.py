@@ -1,37 +1,5 @@
 """PFC composite figure, drawn strictly from the CSV files next to this script.
-
-One figure, written as ``.svg`` and ``.png`` next to this file:
-
-``pfc_composite``
-    A 3 x 4 grid.  Row 1: (a) ours on the full training split, ours at the
-    matched 8k and uniPort on the full split, per endpoint; (b-d) the
-    integration UMAPs -- the fused latent of both modalities, then the raw RNA
-    and raw ATAC inputs.  Rows 2-3: (e, f) astrocyte maturation on training
-    and withheld donors, immature then mature programme, with each cohort
-    drawn from both modalities and the curves averaged over seeds 22, 44 and
-    88.
-
-Every input in this folder is a byte copy from the folder that owns it
-(``bench_fig/``, ``umap_fig/``, ``astro_mixed_fig/``; see
-``neuro_dev_model/pfc_scaling_bench/export_composite_fig.py``), the panel
-scripts included.  Each block is drawn by its own script's axes-level function
--- :func:`plot_pfc_benchmark.draw_8k_vs_full`,
-:func:`plot_pfc_umap.draw_panels`, :func:`plot_pfc_astro.draw_panels` -- under
-that script's own style, with that script's checks.  This script contributes
-the layout, the panel letters, the shared legends, and the composite's own
-shorter labels (listed under "Composite labels" below), and a uniform text
-scale, since the composite is printed much smaller than its parts; the
-standalone figures keep theirs.  Each relabel first checks it replaces the
-label it expects.
-
-Run from any directory::
-
-    python plot_pfc_composite.py
-    # variant: (e, f) control curves from the RNA-only cohort
-    python plot_pfc_composite.py --control-cohort rna_only --stem pfc_composite_rnactl
-
-Requires numpy, pandas, scipy and matplotlib. Rendered with matplotlib 3.11.1.
-"""
+Rendered with matplotlib 3.11.1; Fig 3 uses ``--control-cohort rna_only``."""
 from __future__ import annotations
 
 import argparse

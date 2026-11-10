@@ -1,35 +1,5 @@
 """The data contract: what an example supplies and what the model consumes.
-
-A :class:`Dataset` holds exactly two :class:`Modality` objects and an ordered
-stage vocabulary. Each modality carries its feature matrix, a per-cell stage
-index, and optionally a teacher embedding (for the Stage-A tilt), a training
-mask, group codes, a trunk declaration (:class:`~mtvae.nn.trunks.TrunkSpec`)
-and a reconstruction loss.
-
-The adapters (:mod:`mtvae.adapters`) own everything about the files: which
-matrix and teacher, the stage vocabulary and index mapping, the training
-mask, the modality order and the chromosome ids for a spatial trunk. The
-model never opens a file and never transforms a feature, except for the
-symmetric clip that :class:`Modality` applies itself (:data:`UNIFORM_CLIP`
-unless set otherwise).
-
-Two constraints:
-
-* **Exactly two modalities.** The model has two slots, ``"rna"`` and
-  ``"atac"``, and checkpoint keys use those names (``rna_ae.*``,
-  ``atac_ae.*``) whatever a dataset calls its modalities.
-* **Order is the slot assignment.** ``modalities[0]`` fills the ``"rna"``
-  slot and ``modalities[1]`` the ``"atac"`` slot. Modality names are free.
-
-Example::
-
-    from mtvae import Dataset, Modality, stage_times_from
-    rna = Modality("rna", x_rna, stage_rna, teacher=t_rna)
-    atac = Modality("atac", x_atac, stage_atac, teacher=t_atac)
-    ds = Dataset("mydata", stages=("E1", "E2", "E3"), modalities=(rna, atac),
-                 stage_times=stage_times_from([stage_rna, stage_atac],
-                                              [age_rna, age_atac], 3))
-"""
+A :class:`Dataset` holds exactly two :class:`Modality` objects; the first is the ``"rna"`` slot."""
 from __future__ import annotations
 
 import dataclasses

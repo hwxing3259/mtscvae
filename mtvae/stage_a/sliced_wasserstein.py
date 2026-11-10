@@ -1,11 +1,5 @@
 """Sliced Wasserstein distance between two point clouds.
-
-:func:`sliced_wasserstein_2` projects two equal-size batches onto random unit
-directions and averages the closed-form 1-D squared 2-Wasserstein distance
-(obtained by sorting) over the projections. It is differentiable, and its
-memory cost is ``O(P * n)`` for ``P`` projections and ``n`` rows. Stage A uses
-it to align the two modalities' latent distributions.
-"""
+Stage A uses it to align the two modalities' latent distributions."""
 from __future__ import annotations
 
 import torch

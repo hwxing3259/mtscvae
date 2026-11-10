@@ -1,23 +1,5 @@
 """Astrocyte maturation curves for the PFC example.
-
-Cohorts of first-stage (Gestation) nuclei are transported through the trained
-SDE to every stage and decoded; the decoded marker-gene trajectories of an
-astrocyte (cognate) cohort are compared with those of a control cohort of the
-other cell types. The transport and the shared Brownian stream are
-:mod:`mtvae.predict`; this module chooses the seed cells, the genes
-(:data:`IMMATURE_GENES`, :data:`MATURE_GENES`) and the summary.
-
-- :func:`gestation_pools`, :func:`draw_cohort` and
-  :func:`cohort_trajectories` implement the protocol of the paper's
-  astrocyte panels, with cohorts drawn from one or both modalities.
-- :func:`seed_cells` and :func:`curves` are a single-latent variant that also
-  computes the per-gene margin.
-
-The margin of a gene is :func:`tool_window` (mean of stages 3-4 minus mean of
-stages 0-1) of its decoded trajectory, cognate minus control. It is linear in
-the decoded curves, so an ensemble of drift fields should be compared with the
-mean of its members' margins rather than with a single member.
-"""
+Gestation cohorts are carried through the trained SDE and decoded; astrocytes vs a control."""
 from __future__ import annotations
 
 import dataclasses

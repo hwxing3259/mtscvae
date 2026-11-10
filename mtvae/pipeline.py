@@ -1,30 +1,5 @@
-"""Configure and fit both stages: :class:`PipelineConfig`, :func:`build_dataset`
-and :func:`train`.
-
-Example::
-
-    from mtvae.pipeline import PipelineConfig, build_dataset, train
-
-    hc = build_dataset("fourds", data_dir / "HC", dataset="HC")
-    fit = train(hc, PipelineConfig.for_example("fourds", seed=0, device="cpu"))
-
-    pf = build_dataset("pfc", pfc_dir, train_mask=mask_path)
-    fit = train(pf, PipelineConfig.for_example("pfc", seed=44))
-
-Both examples use the same functions, model and objective. They differ only in
-their entry in :data:`EXAMPLES`: the Stage-A preset and overrides, the Stage-B
-settings, the stage vocabulary, the trunk of each slot and the adapter. Any
-:class:`~mtvae.data.Dataset` can be passed to :func:`train` with a
-``PipelineConfig`` started from the closer example; a new named example needs
-an ``EXAMPLES`` entry and an adapter function.
-
-:func:`train` fits Stage A, hands the model to Stage B in memory
-(:mod:`mtvae.stage_b.handoff`), checks that the handed-over encoder reproduces
-the Stage-A latent exactly, and fits Stage B.
-
-The model has exactly two modality slots, and checkpoint keys use the slot
-names (``rna_ae.*``, ``atac_ae.*``) whatever a dataset calls its modalities.
-"""
+"""Configure and fit both stages: :class:`PipelineConfig`, :func:`build_dataset` and :func:`train`.
+Stage A is handed to Stage B in memory, and must reproduce the Stage-A latent exactly."""
 from __future__ import annotations
 
 import dataclasses

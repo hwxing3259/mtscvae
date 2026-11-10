@@ -1,26 +1,5 @@
 """Refit the paper's seeded runs from a run list, one at a time, and check them.
-
-A run list (``fourds.yaml``, ``pfc_full.yaml``, ``pfc_8k.yaml``) names one config
-file and the seeds (and datasets) to fit. Every run is the same command,
-
-    python -m mtvae.fit --config <config> --seed <s> [--dataset <DS>] \
-        --data-root <data root> --arm <folder> --out-root <out>
-
-and writes the fit folder ``<out>/<folder>`` (``model.pt``, ``latents/``,
-``stage_a.pt``, ``stage_a_latents.npz``, ``run_record.json``), the same layout as
-the released fit ``<data root>/models/<folder>``. Each refit is then compared
-with the released fit, tensor for tensor (``compare.py``).
-
-Each run fits both stages. Runs execute sequentially, never in parallel. From the
-repository root::
-
-    python reproducibility/run_all.py reproducibility/pfc_full.yaml \
-        --data-root /path/to/figshare --out runs/ [--only 44] [--dry-run]
-
-Bit-exact reproduction needs the GPU model each fit was made on (an RTX 4090 for the
-four-dataset and PFC 8k fits, an RTX PRO 4500 for the PFC full-atlas fits) and the
-pinned stack in ``environment.yml``; elsewhere expect differences at float precision.
-"""
+Example: ``python reproducibility/run_all.py reproducibility/pfc_full.yaml --out runs/``."""
 from __future__ import annotations
 
 import argparse

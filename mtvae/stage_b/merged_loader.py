@@ -1,25 +1,5 @@
 """Rebuild the Stage-A encoder and decoders from a merged checkpoint.
-
-The merged checkpoint format stores one ``model_state_dict`` for the whole
-:class:`~mtvae.stage_a.model.MergedVAE`, together with ``config`` (the
-resolved Stage-A settings) and optional ``dataset``, ``arm``, ``seed`` and
-``stages`` entries. :func:`load_stage_a_encoder_merged` reads it.
-
-It differs from the PFC ``phase2_fusion`` format read by
-:mod:`mtvae.stage_b.encoder` in one important way: here the ``fusion.*`` slice
-of the state dict is the whole
-:class:`~mtvae.stage_a.model.StochasticFusion` (``logvar_net`` included) and
-is loaded into ``fusion``, not into ``fusion.mu_net``. All loads are strict,
-since a non-strict load could leave the mean branch at its random
-initialisation and still produce a plausible latent. As in the PFC format,
-``residual_scale`` is a plain attribute rather than a parameter, so every
-fusion field is read from ``config`` and never defaulted.
-
-The decoders are loaded into separate module instances from the same tensors.
-:class:`~mtvae.stage_b.encoder.StageAEncoder` holds the full autoencoders, so
-borrowing ``enc.rna_ae.decoder`` would make the decoders share parameters with
-the encoder being trained; :func:`decoders_are_independent` checks this.
-"""
+All loads are strict, and the decoders are module instances separate from the encoder."""
 from __future__ import annotations
 
 import logging

@@ -1,17 +1,5 @@
 """Stage A as a library call.
-
-:func:`train` fits the Stage-A VAE on a :class:`~mtvae.data.Dataset` with a
-:class:`~mtvae.stage_a.trainer.MergedVAEConfig`; it is a thin wrapper that
-unpacks the dataset into the arrays
-:func:`~mtvae.stage_a.trainer.train_merged` takes. Encoding is a second call,
-because a fit can be trained on a subset (``data.training_view()``, e.g. the
-PFC whole-donor split) and then encode all cells::
-
-    from mtvae.presets import PFC_VAE, for_run
-    fit = train(data, for_run(PFC_VAE, seed=44, device="cpu"))
-    lat = fit.encode(data)              # posterior means and one sample
-    geom = fit.geometry(lat)            # effective-rank diagnostics
-"""
+:func:`train` fits the VAE, maybe on a subset; ``fit.encode(data)`` then encodes all cells."""
 from __future__ import annotations
 
 import dataclasses

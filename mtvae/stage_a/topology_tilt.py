@@ -1,34 +1,5 @@
 """Neighbourhood-aware topology tilt: a structure-preserving regulariser.
-
-Implements the intra-modality, neighbourhood-aware exponential-tilting term of
-MIND (Xing & Yau 2025) as an additive loss on the Stage-A latent. The term is
-the cross-entropy half of t-SNE,
-
-    L_tilt(Z) = - sum_ij P_ij * log Q_ij(Z),
-
-where
-
-* ``P`` is a fixed **teacher affinity**: the perplexity-calibrated t-SNE
-  affinity of a teacher embedding of the same cells (for example a
-  Harmony-corrected LSI embedding for ATAC). The teacher is separate from the
-  encoder input, so the term injects external neighbourhood structure rather
-  than echoing the encoder.
-* ``Q`` is the **Student-t latent affinity** ``1 / (1 + ||z_i - z_j||^2)`` on
-  the learned latent (diagonal zeroed, normalised to sum 1).
-
-Minimising ``-sum P log Q`` equals minimising ``KL(P || Q)`` up to the constant
-``sum P log P``. The normalisation of ``Q`` provides built-in repulsion, which
-preserves cluster separation.
-
-``P`` can be computed per batch (:func:`teacher_affinity`,
-:func:`topology_tilt_loss`) or once over the whole dataset and then subset per
-batch (:func:`full_teacher_affinity`, :func:`subset_affinity`,
-:func:`tilt_loss_from_P`), which is MIND's default and much faster.
-
-MIND's cross-modal terms need cells measured in both modalities; the
-modalities here are treated as unpaired, so only the per-modality term is
-used.
-"""
+MIND's per-modality term ``-sum_ij P_ij log Q_ij(Z)``, with ``P`` from a teacher embedding."""
 from __future__ import annotations
 
 import numpy as np

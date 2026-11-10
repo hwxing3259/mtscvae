@@ -1,32 +1,5 @@
 """Stage-A reconstruction and KL terms, and latent-geometry diagnostics.
-
-The KL to ``N(0, I)`` (:func:`gaussian_kl`) has four controls:
-
-``beta_kl``
-    Overall weight (applied by the trainer).
-``kl_scale``
-    ``"mind"`` divides the Gaussian KL by ``n_cells * n_stochastic_dims``, the
-    normalisation of the MIND reference implementation, while the
-    reconstruction is a per-element mean; this is an effective ``beta`` of
-    ``1/D`` relative to the standard ELBO. ``"elbo"`` is the per-sample sum
-    over dimensions, ``D`` times larger.
-``kl_free_bits``
-    Per-dimension floor in nats. Below the floor a dimension's KL is not
-    penalised, which removes the incentive to prune it and so opposes
-    posterior collapse.
-``kl_dims``
-    Factorised posterior: only the first ``k`` dimensions are stochastic and
-    penalised; the rest are deterministic and cannot be pruned by the prior.
-
-Diagnostics
------------
-:func:`participation_ratio` (the effective rank of :mod:`mtvae.rank`) should
-be reported on the posterior **mean** and on a **sample** side by side: the
-covariance of a sample is ``Cov(mu) + sigma^2 I``, so every collapsed
-dimension adds ``sigma^2`` to the spectrum and inflates the sampled
-participation ratio while carrying no information. :func:`active_units` is the
-companion information measure.
-"""
+The KL to ``N(0, I)`` is set by ``beta_kl``, ``kl_scale``, ``kl_free_bits`` and ``kl_dims``."""
 from __future__ import annotations
 
 import numpy as np

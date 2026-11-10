@@ -1,17 +1,5 @@
 """Declarative choice of a modality's encoder/decoder trunk.
-
-A :class:`TrunkSpec` travels with its :class:`mtvae.data.Modality` and states
-which trunk the modality gets: the plain MLP autoencoder, the
-chromosome-aware Conv1d trunk, or the same Conv1d trunk without chromosome
-boundaries. :func:`build` constructs the trunk.
-
-The spec, rather than a ready-built ``nn.Module``, is what the caller supplies
-because construction order matters for reproducibility: Stage-A training calls
-``torch.manual_seed`` and only then constructs the trunks, so a module built by
-the caller would be initialised from a different RNG position and every weight
-would change. :func:`build` is called inside the trainer at the position of
-the plain constructor.
-"""
+A :class:`TrunkSpec`, not a module, so the trainer builds the trunk at its seeded RNG position."""
 from __future__ import annotations
 
 import dataclasses

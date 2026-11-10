@@ -1,33 +1,5 @@
 """PFC held-out-donor figure, drawn strictly from the CSV files next to this script.
-
-One figure, written as ``.svg`` and ``.png`` next to this file:
-
-``pfc_astro_maturation``
-    Eight astrocyte developmental marker genes, four per row (immature
-    programme, then mature programme), across the six developmental stages.
-    Blue is the model on training donors and red on withheld donors; solid is
-    astrocytes (mean over the seeds, band +-1 s.e.m. across seeds), dashed
-    is the non-astrocyte control propagated through the same pipeline, dotted
-    is the observed astrocyte curve.
-
-Inputs are ``pfc_astro_panels.csv`` and ``pfc_astro_margins.csv`` and nothing
-else. Their rows fix every order: genes and programmes in order of first
-appearance, stages by ``stage_idx``, seeds sorted. The script refuses to draw
-if a gene's observed curve differs across seeds, since the seeds are then not
-on a common reference and must not be averaged.
-
-:func:`draw_panels` draws onto a 2 x 4 axes array it is given, so a composite
-figure can place this block beside others; :func:`astro_figure` is the
-standalone figure.
-
-Run from any directory::
-
-    python plot_pfc_astro.py
-
-Requires numpy, pandas and matplotlib. The figure was rendered with matplotlib
-3.11.1, and is pixel-identical to the PFC example notebook's
-``results/figures/pfc_astro_maturation.png``.
-"""
+Rendered with matplotlib 3.11.1."""
 from __future__ import annotations
 
 import argparse

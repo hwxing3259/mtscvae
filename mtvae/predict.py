@@ -1,21 +1,5 @@
 """Transport cells through a trained SDE: :func:`predict` and :func:`rollouts`.
-
-:func:`predict` transports seed latents from the first stage time to every
-stage time and optionally decodes them. Stage 0 is ``z0`` itself; every other
-stage is an independent integration from ``stage_times[0]``, not a chain
-through the intermediate stages. It does no seeding and no looping over
-rollouts.
-
-:func:`rollouts` repeats :func:`predict` over several rollouts for several
-seed sets that share one Brownian stream: per rollout it seeds the global
-torch stream once, then transports each seed set in the given order. Because
-the sets share the stream, the noise each set sees depends on how many
-increments the sets before it consumed, so changing the order changes every
-result (silently). The seed sets are therefore passed as an ``OrderedDict``,
-which makes the order explicit at the call site. An explicit generator
-threaded through the sets in the same order gives bit-identical results to
-the global stream.
-"""
+The seed sets of :func:`rollouts` share one Brownian stream, so their order changes results."""
 from __future__ import annotations
 
 import dataclasses

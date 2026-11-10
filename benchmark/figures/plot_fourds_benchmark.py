@@ -1,22 +1,5 @@
 """Four-dataset benchmark figure, drawn strictly from ``fourds_benchmark_values.csv``.
-
-The CSV is the only input. It has one row per bar, with columns ``dataset``,
-``family``, ``metric``, ``method`` and ``value``. Its row order fixes the
-column order (datasets), the row order (metrics) and the bar order (methods).
-An empty ``value`` is a cell that is not scored. A panel whose values are all
-empty is drawn as "n/a"; that is DR ``rna_rare_sil``, whose three rarest RNA
-types hold 1, 1 and 2 cells.
-
-The script contributes only styling: method colours, family colours and panel
-geometry. It draws no error bars, hatching, outlines or caveat tags.
-
-Run from any directory; the figure is written next to this file::
-
-    python plot_fourds_benchmark.py
-
-Requires numpy, pandas and matplotlib. The published figure was rendered with
-matplotlib 3.11.1.
-"""
+Rendered with matplotlib 3.11.1."""
 
 from __future__ import annotations
 

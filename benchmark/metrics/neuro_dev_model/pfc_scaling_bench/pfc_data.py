@@ -1,24 +1,4 @@
-"""PFC cells, tiers and labels for the scaling benchmark.
-
-Three jobs, kept here so no runner re-implements them:
-
-1. **The tiers.**  :func:`build_tiers` permutes each modality's whole-donor
-   training pool once and writes the permutation; tier ``N`` is its first ``N``
-   rows (:func:`tier_rows`).  Rows are always handed out IN PERMUTATION ORDER, so
-   in every embedding any method writes, rows ``[:N_EVAL]`` are the evaluation
-   draw ``E``.  That convention is what lets one scorer read every method.
-2. **The matrices.**  :func:`load_x` returns the staged z-scored matrices
-   clipped at the pipeline's ``UNIFORM_CLIP`` -- exactly what our model sees --
-   for any row set, so every method is handed the same numbers.
-3. **The labels.**  :func:`labels` gives the 13 coarse types (the PFC example's
-   vocabulary), the stage index and the donor, and :func:`scorer_dataset` wraps
-   ``E`` as the four-dataset scorer's ``DatasetData`` so the published scorer
-   runs unmodified.
-
-Run once, before anything else::
-
-    python -m neuro_dev_model.pfc_scaling_bench.pfc_data
-"""
+"""PFC cells, tiers and labels for the scaling benchmark."""
 from __future__ import annotations
 
 import hashlib

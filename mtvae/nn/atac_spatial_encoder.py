@@ -1,21 +1,5 @@
 """Chromosome-aware Conv1d autoencoder for peak-ordered ATAC features.
-
-:class:`SpatialModalityAutoencoder` has the interface of
-:class:`mtvae.nn.autoencoders.ModalityAutoencoder` and adds a residual
-convolutional pre-encoder that smooths each peak with its genomic neighbours:
-
-- encoder: :class:`SpatialResidualBlock` (one or more parallel 1-channel
-  convolutions, summed, added to the input) followed by the MLP
-  ``input_dim -> 512 -> 256 -> 128 -> latent_dim``;
-- decoder: the mirrored MLP, with no convolution, so reconstruction stays
-  per-peak.
-
-The features must be peaks sorted by chromosome and then by start position.
-A kernel that spans a chromosome boundary would mix unrelated peaks, so
-:class:`ChromosomeAwareConv1d` zeroes every output position whose window
-crosses a boundary. Passing ``chr_ids=None`` gives the same architecture with
-an all-ones mask (the ``"conv"`` trunk kind of :mod:`mtvae.nn.trunks`).
-"""
+Peaks must be sorted by chromosome and start; windows that cross a chromosome are zeroed."""
 from __future__ import annotations
 
 from pathlib import Path

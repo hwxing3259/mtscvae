@@ -1,9 +1,5 @@
 """CPU smoke test: a tiny two-stage fit on synthetic data.
-
-Run from the repository root::
-
-    pytest tests/
-"""
+Run from the repository root: ``pytest tests/``."""
 from __future__ import annotations
 
 import dataclasses

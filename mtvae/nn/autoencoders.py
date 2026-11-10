@@ -1,16 +1,5 @@
 """Per-modality MLP autoencoder.
-
-:class:`ModalityAutoencoder` is the default encoder/decoder trunk for one
-modality:
-
-- encoder ``input_dim -> 512 -> 256 -> 128 -> latent_dim`` with SiLU
-  activations and no batch norm;
-- decoder ``latent_dim -> 128 -> 256 -> 512 -> input_dim`` with a linear
-  output.
-
-It is deterministic (no KL term of its own); the Stage-A VAE adds a stochastic
-fusion layer on top of the encoder output.
-"""
+Encoder ``input_dim -> 512 -> 256 -> 128 -> latent_dim`` (SiLU); mirrored linear-output decoder."""
 from __future__ import annotations
 
 from typing import Sequence

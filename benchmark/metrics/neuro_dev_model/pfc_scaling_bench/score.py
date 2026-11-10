@@ -1,24 +1,4 @@
-"""Score one PFC embedding on the evaluation draw ``E``.
-
-Two panels, both computed on rows ``[:N_EVAL]`` of the embedding -- the same
-cells for every method and every tier:
-
-* **The four-dataset panel**, by the four-dataset scorer itself
-  (``mtvae_4ds_coadapt.data.snr_score.score_latent``) and the rare-type rule
-  the four-dataset benchmark adopted (``mtvae.data.snr_rare_population``), the
-  same two modules ``four_data_bench_results/bench_emb/run_benchmark.py`` calls.
-  Its seven endpoints: ``time_corr``, ``nmi`` (Leiden), ``batch_entropy``,
-  ``lta_time``, ``lta_type``, ``rna_rare_sil``, ``atac_rare_sil``.  As there, the
-  scorer's stochastic steps are seeded with the embedding's own seed.
-* **The PFC example's panel**, by the shipped ``pfc.bench.metrics``: k-means
-  ARI/NMI (k=20, ``n_init=10``), kNN-30 purity, and the bidirectional 15-NN
-  transfer whose mean is the example's *overlap*.  Lets the new runs be read
-  against the old three-tier table.
-
-Run::
-
-    python -m neuro_dev_model.pfc_scaling_bench.score --tag SCOTv2_n16000_s0
-"""
+"""Score one PFC embedding on the evaluation draw ``E``."""
 from __future__ import annotations
 
 import argparse

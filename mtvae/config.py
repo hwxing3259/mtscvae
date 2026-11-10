@@ -1,25 +1,5 @@
 """Read and write the hyperparameters of both stages as YAML.
-
-Write a commented reference file with every setting at the example's value::
-
-    python -m mtvae.config --example fourds --out my_run.yaml
-
-Edit it, then fit with it::
-
-    python -m mtvae.fit --config my_run.yaml --arm my_run \\
-        --data-dir <data_dir> --out-root <out_dir>
-
-or, from Python::
-
-    from mtvae import load_config, train
-    cfg = load_config("my_run.yaml")
-    fit = train(my_dataset, cfg)
-
-A file need only name the settings it changes; everything else comes from the
-recipe of the example it names. The reference values are read from
-:meth:`mtvae.pipeline.PipelineConfig.for_example`, so the file always matches
-what would run. Unknown keys raise an error.
-"""
+Write a commented reference: ``python -m mtvae.config --example fourds --out my_run.yaml``."""
 from __future__ import annotations
 
 import argparse

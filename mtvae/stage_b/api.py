@@ -1,25 +1,5 @@
 """Stage B as a library call.
-
-:class:`StageA` is what Stage B consumes from Stage A: the Stage-A latents,
-the trainable encoder, two decoders separate from it, the dimensions and the
-RNG protocol used. :meth:`StageA.from_vae` builds it from a fitted
-:class:`~mtvae.stage_a.api.TrainedVAE` through :mod:`mtvae.stage_b.handoff`.
-:func:`train_coadapt` then fits the latent SDE while co-adapting the encoder
-and decoders, and returns a :class:`TrainedDynamics`.
-
-The SDE must be constructed after :meth:`StageA.from_vae`, because the
-handoff re-seeds and (under ``"staged_equivalent"``) replays module
-constructions that set where the SDE initialises in the torch stream;
-``rng_protocol`` therefore has no default. See :mod:`mtvae.stage_b.handoff`.
-
-Usage::
-
-    stage_a = StageA.from_vae(fit, fit.encode(data),
-                              rng_protocol="staged_equivalent",
-                              atac_spec=data.modalities[1].trunk)
-    sde = SDESampler(latent_dim=stage_a.latent_dim)
-    dyn = train_coadapt(stage_a, data, hyperparameters, sde=sde)
-"""
+Build the SDE after :meth:`StageA.from_vae`, whose handoff sets the RNG stream position."""
 from __future__ import annotations
 
 import dataclasses

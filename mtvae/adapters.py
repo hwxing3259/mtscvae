@@ -1,18 +1,5 @@
 """Readers that turn each example's files into a :class:`mtvae.data.Dataset`.
-
-:func:`fourds` reads one of the four scMultiNODE benchmark datasets (HC, HO,
-DR, MN); :func:`pfc` reads the Herring et al. (2022) human prefrontal cortex
-atlas. The adapter is the only layer that touches the filesystem; any function
-returning a valid ``Dataset`` works equally well with
-:func:`mtvae.pipeline.train`.
-
-Clipping
---------
-``clip`` maps each modality to a symmetric input bound, or ``None`` for no
-clipping; it is the ``data.clip`` setting of a config. Clipping is idempotent,
-so data that is already bounded is unaffected. Each modality records the bound
-it got in ``Modality.clip``.
-"""
+:func:`fourds` reads HC, HO, DR or MN; :func:`pfc` reads the Herring et al. (2022) PFC atlas."""
 from __future__ import annotations
 
 import logging

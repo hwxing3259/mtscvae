@@ -1,7 +1,5 @@
 """Effective rank of an embedding (participation ratio).
-
-The module is pure numpy so that scoring code can import it without torch.
-"""
+The module is pure numpy so that scoring code can import it without torch."""
 from __future__ import annotations
 
 import numpy as np

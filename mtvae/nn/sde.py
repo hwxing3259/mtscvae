@@ -1,23 +1,5 @@
 """Latent neural SDE with a path-wise KL term.
-
-The Stage-B dynamics are
-
-    dz_t = f_post(z_t, t) dt + g(z_t, t) dW_t        (posterior SDE)
-    dz_t = f_prior(z_t, t) dt + g(z_t, t) dW_t       (prior SDE)
-
-and the path KL between them is accumulated alongside the state,
-
-    KL_T = 0.5 * integral_0^T || (f_post - f_prior) / g ||^2 dt,
-
-during a plain Euler-Maruyama integration (:func:`euler_maruyama_kl`). With the
-default zero prior drift (:class:`ZeroDrift`) the KL is a drift-magnitude
-penalty weighted by ``1 / g^2``.
-
-:class:`SDESampler` bundles the drift and diffusion networks. Its
-``forward_chain(z, ts)`` integrates through a sequence of stage times and
-returns the trajectory and the KL; ``forward(z, t, t0)`` integrates one
-interval and returns only the end state.
-"""
+Euler-Maruyama accumulates ``0.5 * int ||(f_post - f_prior) / g||^2 dt``; the prior drift is 0."""
 from __future__ import annotations
 
 from typing import Optional, Tuple

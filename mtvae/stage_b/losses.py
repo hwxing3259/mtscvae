@@ -1,25 +1,5 @@
 """A Sinkhorn divergence that does not reward collapse.
-
-:func:`mtvae.stage_b.sinkhorn.sinkhorn_div_scaled` computes the debiased
-divergence
-
-    S(x, y) = C(x, y) - 0.5 * (C(x, x) + C(y, y))
-
-with three cost evaluations, each normalised by the detached mean of its own
-cost matrix. For a collapsed prediction (every row of ``x`` identical, which a
-trainable decoder can drift into) the true self-cost ``C(x, x)`` is zero, but
-in float32 ``cdist`` returns rounding noise, and dividing that noise by its own
-mean gives a self-cost near 1. The debiasing then subtracts a term that should
-be zero, so ``S`` is roughly halved and total collapse scores better than the
-observed data. (In float64 ``cdist`` returns exact zeros and collapse is
-correctly scored worst.)
-
-:func:`sinkhorn_div_shared_scale` normalises all three cost matrices by one
-shared scale, taken from the cross term ``C(x, y)``. That scale is positive
-unless both clouds are degenerate, so a zero self-cost stays zero.
-:func:`collapse_sanity` checks that a divergence ranks an independent sample
-above a collapsed prediction.
-"""
+:func:`sinkhorn_div_shared_scale` scales all three cost matrices by the cross term's."""
 from __future__ import annotations
 
 from typing import Tuple

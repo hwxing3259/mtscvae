@@ -1,41 +1,5 @@
 """PFC integration metrics, VENDORED verbatim from the published benchmark.
-
-Provenance
-----------
-Copied from the published benchmark harness --
-``score_bidirectional.py`` (metrics + Tier-C subsample), ``score_rep.py``
-(identical copies), and ``herring_cmp/a6_heldout_xmodal_centroid.py`` (centroid
-cosine).  Vendored rather than imported so this package is self-contained: the
-benchmark harness lives only in that split-off project, is untracked in git, and
-its embeddings are gitignored.
-
-**Do not "clean up" the bodies below.**  They reproduce a published table; a
-subtle rewrite silently produces numbers that are no longer comparable to it.
-The recipes here were verified by reproducing the published Tier-C cells exactly
-(ours ATAC ARI 0.4198 +/- 0.0234 vs published 0.420 +/- 0.021; teacher
-0.4079 +/- 0.0236 vs published 0.408 +/- 0.021).
-
-Five traps this file deliberately preserves
--------------------------------------------
-1. **Four ARI recipes coexist upstream.**  The published Tier-C band uses
-   ``ari_seed`` -- a *single* k-means at ``random_state=seed`` where the same
-   seed also redraws the 20k subsample.  ``score_bidirectional``'s own
-   ``random_state=0`` single draw gives different numbers (0.491 vs the
-   published 0.504 on RNA), and other tables in the same paper use
-   ``n_init=4``.  Use :func:`ari_seed` + :func:`sub20k` together for anything
-   compared against the published band.
-2. **The coarse maps are asymmetric between modalities.**  ``PV_SCUBE3`` is in
-   both vocabularies: RNA sends it to ``Other`` (not a dict key), ATAC sends it
-   to ``PV`` (matches the ``startswith("PV")`` rule).  Preserved as-is.
-3. **Chance is ``sum(p^2)``** = 0.115 (RNA) / 0.114 (ATAC), not ``1/13`` = 0.077.
-   Both numbers appear in the paper, for different tables.
-4. **The published centroid cosine is RAW (uncentered)** and its own
-   label-shuffled null scores 0.96-0.999 -- *above every real cell type*.  It is
-   reproduced here for continuity, and :func:`centroid_cosine` also returns the
-   centred variant, which is the one that carries signal.
-5. **ATAC ``ID2`` has 30 cells atlas-wide**, 5-11 in a typical 20k draw.  Any
-   change to the draw can drop it and silently change the reported means.
-"""
+Do not "clean up" the bodies: they reproduce a published table."""
 from __future__ import annotations
 
 import numpy as np

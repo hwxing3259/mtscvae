@@ -1,35 +1,5 @@
 """PFC benchmark figures, drawn strictly from the CSV files next to this script.
-
-Four figures, each written as ``.svg`` and ``.png`` next to this file:
-
-``fourds_benchmark_grid_trimmed_pfc``
-    The approved four-dataset grid with PFC as a fifth column (``grid_values.csv``),
-    drawn by ``plot_fourds_benchmark.py`` -- a byte copy of the four-dataset
-    deposit's script -- with the canvas widened so every panel keeps its
-    four-column size.
-``pfc_8k_vs_full``
-    Three bars per endpoint: ours on the full training split, ours at the
-    matched size, and uniPort -- the only competitor that reaches full -- on the
-    full split (``8k_vs_full_values.csv``).
-``pfc_scaling_runtime``
-    Wall time and peak memory of one fit against cells fitted, measured and
-    projected (``runtime_values.csv``, ``runtime_reference_lines.csv``).
-``pfc_scaling_endpoints_vs_n``
-    The seven endpoints against cells fitted (``endpoints_vs_n_values.csv``).
-
-The CSVs are the only inputs. Their rows fix every order: method order is taken
-from ``grid_values.csv``, metric order likewise. This script contributes only
-styling (method colours and family colours come from ``plot_fourds_benchmark.py``;
-markers are defined here) and refuses to write a figure whose drawn marks differ
-from its CSV.
-
-Run from any directory::
-
-    python plot_pfc_benchmark.py
-
-Requires numpy, pandas and matplotlib. The figures were rendered with
-matplotlib 3.11.1.
-"""
+Rendered with matplotlib 3.11.1."""
 from __future__ import annotations
 
 import argparse

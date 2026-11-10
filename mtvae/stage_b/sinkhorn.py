@@ -1,17 +1,4 @@
-"""Entropic optimal-transport costs and Sinkhorn divergences, plus Stage-B
-default constants.
-
-:func:`sinkhorn_div` and :func:`sinkhorn_div_scaled` compute the debiased
-Sinkhorn divergence ``OT(x, y) - 0.5 * (OT(x, x) + OT(y, y))`` with log-domain
-Sinkhorn iterations and a squared-Euclidean cost. The scaled variant can divide
-each cost matrix by its own detached mean, so one ``eps`` works across spaces
-of different scale; see :mod:`mtvae.stage_b.losses` for a variant that shares
-one scale across the three terms.
-
-The module-level constants are Stage-B defaults and PFC stage bookkeeping
-(``STAGE_TO_IDX``, ``IDX_TO_STAGE``, ``N_STAGES``, ``D_LATENT``), derived from
-:mod:`mtvae._constants`.
-"""
+"""Entropic optimal-transport costs and Sinkhorn divergences, plus Stage-B default constants."""
 from __future__ import annotations
 
 import numpy as np

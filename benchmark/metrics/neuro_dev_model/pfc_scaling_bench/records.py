@@ -1,10 +1,4 @@
-"""Run records: the provenance of every fit and every score.
-
-A record is written ONCE, by the process that owns the result, when it finishes
-(or by the scheduler when that process was killed and could not).  Logs are not
-provenance: two processes can interleave on one log file, never on one record.
-The aggregator reads records only.
-"""
+"""Run records: the provenance of every fit and every score."""
 from __future__ import annotations
 
 import json

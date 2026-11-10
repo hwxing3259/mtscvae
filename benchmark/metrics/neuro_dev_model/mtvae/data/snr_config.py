@@ -1,35 +1,5 @@
 """Dataset registry and shared configuration for the scMultiNODE replication benchmark.
-
-This module is the single source of truth for the four datasets evaluated in
-``scmultinode.pdf`` §3 -- human cortex (HC), human organoid (HO), drosophila
-embryogenesis (DR) and mouse neocortex (MN).  Every other module in
-``scmultinode_replication`` resolves paths and column names through here so that
-all four datasets travel through one code path.
-
-The registry values below were verified directly against the released
-``reduce_processed`` CSVs (figshare ``10.6084/m9.figshare.27420657.v2``, member
-``data.zip``, file id 50130363), not copied from the paper.  Anything the data
-contradicts is recorded in :data:`DATASETS` with a comment.
-
-Notes
------
-The reference loader ``scMultiNODE_ref/utils/FileUtils.loadSCData`` branches per
-dataset and does *not* feed every dataset through identical preprocessing.  The
-whole point of this module plus :mod:`snr_data` is to replace those branches with
-one contract, so that a method comparison is a comparison of methods and not of
-loaders.
-
-Environment
------------
-``SNR_DATA_ROOT``
-    Root holding the extracted archive tree (``<root>/data/<archive_dir>/...``).
-    Defaults to ``~/data/archive``.
-``SNR_RESULTS_ROOT``
-    Root for tables, figures and run artifacts.  Defaults to
-    ``~/results``.
-``SNR_RUNS_ROOT``
-    Root for per-method latent outputs.  Defaults to ``~/runs``.
-"""
+Paths come from ``SNR_DATA_ROOT``, ``SNR_RESULTS_ROOT`` and ``SNR_RUNS_ROOT``."""
 from __future__ import annotations
 
 import os

@@ -1,32 +1,5 @@
 """Evaluation metrics for the scMultiNODE replication benchmark.
-
-Two kinds of function live here.
-
-**Faithful ports.**  ``transfer_accuracy``, ``feature_corr_per_sample``,
-``neighbor_overlap``, ``foscttm``, ``batch_entropy``, ``label_corr`` and
-``nmi_louvain`` reproduce ``scMultiNODE_ref/optim/evaluation.py`` and
-``modal_integration/Compare_Modal_Alignment_*.py`` exactly, including argument
-order and default parameters, so that our numbers are comparable with the
-authors' published ones.  Deviations, where unavoidable, are documented on the
-function and are limited to (a) seeding an unseeded RNG and (b) replacing an
-O(n^2 log n) loop with an algebraically identical vectorised computation, which
-:func:`neighbor_overlap` verifies against the reference on a subsample.
-
-**Nulls and baselines.**  The paper reports the metrics above without a null.
-Several of them are satisfiable without any integration at all -- a label
-transfer can score below its own majority-class baseline, and FOSCTTM has a
-composition-dependent floor.  Every metric here therefore has a companion that
-computes the value a trivial predictor would obtain, so no number is reported
-without the thing it must beat.
-
-Notes
------
-Argument order matters and is easy to get backwards.  Throughout,
-``domain1``/``x1`` is the **RNA** side and ``domain2``/``x2`` is the **ATAC**
-side, matching the reference call sites.  :func:`transfer_accuracy` fits the
-classifier on ``domain2`` and predicts labels for ``domain1``; that is, it
-**trains on ATAC and scores on RNA**.
-"""
+Throughout, ``x1``/``domain1`` is RNA and ``x2``/``domain2`` is ATAC."""
 from __future__ import annotations
 
 import logging

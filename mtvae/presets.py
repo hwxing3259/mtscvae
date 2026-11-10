@@ -1,20 +1,5 @@
 """Complete Stage-A configurations for the two examples.
-
-Each preset is a fully specified
-:class:`~mtvae.stage_a.trainer.MergedVAEConfig`: every field is set
-explicitly, so no value is silently inherited from the dataclass defaults
-(which match neither example).
-
-``VAE_PRESETS``
-    ``"fourdata"`` (:data:`FOURDATA_VAE`), ``"pfc"`` (:data:`PFC_VAE`) and
-    ``"pfc_n8_twin"`` (:data:`PFC_VAE_N8_TWIN`).
-
-Seed and device are run parameters, not part of a recipe; the presets carry
-default values for both, and :func:`for_run` overrides them::
-
-    from mtvae.presets import PFC_VAE, for_run
-    cfg = for_run(PFC_VAE, seed=44, device="cpu")
-"""
+Every field is set explicitly; :func:`for_run` sets the seed and device."""
 from __future__ import annotations
 
 import dataclasses

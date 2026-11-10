@@ -1,23 +1,4 @@
-"""Score one saved latent with the paper's metric panel *and* the nulls it omits.
-
-The paper reports each metric as a bare number.  Several of them are satisfiable
-without any integration: a label transfer can score below its own majority-class
-baseline, FOSCTTM has a composition-dependent floor, and NMI/ARI have a
-non-zero shuffled-label expectation.  This module therefore emits, for every
-metric, the value **and** the thing it has to beat.
-
-It also scores each latent against **donor/batch** as well as against cell type.
-On ZebraHub every method's latent clustered more by batch than by cell type in
-at least one modality; that comparison needs no classifier and is the cleanest
-display of the confound.
-
-One dataset/method/seed per invocation, resumable, matching
-:mod:`snr_run_method`.
-
-Run::
-
-    ~/env/bin/python snr_score.py --dataset HC --method SCOTv2 --seed 0
-"""
+"""Score one saved latent with the paper's metric panel *and* the nulls it omits."""
 from __future__ import annotations
 
 import argparse

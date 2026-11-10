@@ -1,20 +1,5 @@
 """Stage-A model: per-modality trunks, a stochastic fusion head, and decoders.
-
-The map for modality ``m`` is ``D_m . F . E_m``: the modality's encoder
-``E_m``, a fusion layer ``F`` that emits a diagonal-Gaussian posterior
-``q(z | x) = N(mu, diag(sigma^2))`` over the shared latent, and the modality's
-decoder ``D_m``.
-
-The posterior sits at the fusion output, not on the encoders, so the
-per-modality trunks are plain :class:`~mtvae.nn.autoencoders.ModalityAutoencoder`
-instances and pre-trained trunk checkpoints load unchanged (``staged`` mode).
-
-The mean branch is a :func:`mtvae.nn.fusion_arch.make_fusion` block whose
-output layer is zero-initialised, so ``mu = h`` exactly at initialisation. With
-``sigma_mode="fixed"`` no log-variance parameters are created, so under
-``deterministic=True`` the model is a deterministic fused autoencoder with the
-same parameters and initialisation order.
-"""
+The diagonal-Gaussian posterior sits at the fusion output; ``mu = h`` at initialisation."""
 from __future__ import annotations
 
 import math

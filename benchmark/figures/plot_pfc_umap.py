@@ -1,34 +1,5 @@
 """PFC integration figure, drawn strictly from the CSV files next to this script.
-
-One figure, written as ``.svg`` and ``.png`` next to this file:
-
-``pfc_integration_row``
-    (a) one UMAP of the fused latent of both modalities (seed 44), with each
-    type's RNA and ATAC centroids joined; (b, c) cosine UMAPs of the raw RNA
-    and ATAC encoder inputs, with the medoids of the three types with the
-    weakest cross-modal alignment starred.
-
-Inputs are the six CSVs in this folder and nothing else:
-``umap_joint_coords.csv``, ``umap_raw_rna_coords.csv``,
-``umap_raw_atac_coords.csv`` (the points), ``cell_types.csv`` (type order, which
-fixes the palette, and which types are starred), ``umap_markers.csv`` (every
-centroid and medoid drawn, in drawing order) and ``umap_settings.csv`` (the
-UMAP settings shown in the titles). The script recomputes every marker from the
-coordinates and refuses to draw if one differs from its CSV, and refuses if
-the starred types are not the lowest mean cosines.
-
-:func:`draw_panels` draws onto three axes it is given, so a composite figure
-can place this row beside others; :func:`integration_row_figure` is the
-standalone figure.
-
-Run from any directory::
-
-    python plot_pfc_umap.py
-
-Requires numpy, pandas, scipy and matplotlib. The figure was rendered with
-matplotlib 3.11.1, and is pixel-identical to the PFC example notebook's
-``results/figures/pfc_integration_row.png``.
-"""
+Rendered with matplotlib 3.11.1."""
 from __future__ import annotations
 
 import argparse

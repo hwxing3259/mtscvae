@@ -9,11 +9,12 @@ repository.
 ```
 benchmark/
 ├── score.py               scores embeddings with the scorer of record
-├── metrics/               the scorer of record, as copies (md5s in metrics/MD5SUMS). Machine
+├── metrics/               the scorer of record, as copies with short module docstrings. Machine
 │                          paths in docstrings, unused path defaults and provenance strings
 │                          are given as home folders (~/...); the code is otherwise identical
-├── figures/               the figures' CSV-only plot modules, as copies (figures/MD5SUMS);
-│                          one legend label of the runtime figure, not drawn here, is reworded
+├── figures/               the figures' CSV-only plot modules, as copies with short module
+│                          docstrings; one legend label of the runtime figure, not drawn here,
+│                          is reworded
 ├── fig2_benchmark.ipynb   Fig 2 from figures/fig2_benchmark/
 └── fig3_pfc.ipynb         Fig 3 and Table 1 from figures/fig3_pfc/
 ```

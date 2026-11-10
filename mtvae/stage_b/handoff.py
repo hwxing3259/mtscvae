@@ -1,50 +1,5 @@
 """In-memory handoff from Stage A to Stage B.
-
-:func:`build_handoff` takes a trained :class:`~mtvae.stage_a.model.MergedVAE`
-and returns what Stage B needs: a trainable
-:class:`~mtvae.stage_b.encoder.StageAEncoder` that wraps the live trunks and
-fusion (so co-adaptation updates the model in place), two decoders, and
-metadata for the run record. It is the in-memory equivalent of saving Stage
-A and reloading it with :mod:`mtvae.stage_b.merged_loader`, and takes care of
-three things that the round trip does implicitly.
-
-1. Decoders are re-instantiated, never borrowed.
-   ``MergedVAE.rna_ae`` holds the encoder and the decoder of that modality,
-   so ``model.rna_ae.decoder`` shares tensors with the encoder Stage B
-   trains. Borrowed decoders would make ``torch.optim.Adam`` reject
-   parameters that appear in two groups, or, if that were bypassed, let the
-   encoder's updates move the decoders. The decoders are therefore loaded
-   into fresh modules from the model's state dict, and
-   :func:`~mtvae.stage_b.merged_loader.decoders_are_independent` is asserted.
-
-2. Dimensions are checked explicitly.
-   With no ``load_state_dict(strict=True)``, a wrong latent width would not
-   raise. Feature counts are read off the live trunks, the latent width is
-   checked against the fusion output, and both are returned in ``meta``.
-
-3. The RNG stream position is a declared choice.
-   In the original two-script pipeline the Stage-B script seeds torch,
-   rebuilds the Stage-A encoder from the checkpoint (RNA trunk, ATAC trunk,
-   fusion), builds two autoencoders for the decoders, and only then
-   constructs the :class:`~mtvae.nn.sde.SDESampler`. The SDE's initial
-   weights, and every random draw of the training loop after them, depend on
-   that sequence. The in-memory handoff needs only the decoder autoencoders,
-   so ``rng_protocol`` (no default) states which stream to use:
-
-   ``"reseed"``
-       Re-seed torch and numpy from the run seed, then build only what is
-       needed. Not bit-equal to the two-script pipeline: a different draw
-       from the same seed.
-   ``"staged_equivalent"``
-       Re-seed, then construct and discard the modules the two-script
-       pipeline builds before its decoders, so ``SDESampler`` (constructed by
-       the caller after the handoff) initialises at the same stream position
-       and the fit is bit-equal to the two-script pipeline on the same
-       machine.
-
-   ``stage_b`` names which Stage-B construction sequence to replay; see
-   :data:`STAGE_B_KINDS`.
-"""
+Decoders are re-instantiated, dimensions checked, and the RNG stream set by ``rng_protocol``."""
 from __future__ import annotations
 
 import logging

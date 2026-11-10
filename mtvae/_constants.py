@@ -1,9 +1,5 @@
 """Package-wide constants.
-
-The feature dimensions apply only to the PFC ``phase2_fusion`` checkpoint
-format, whose state dicts do not record them; the merged checkpoint format and
-:func:`mtvae.pipeline.train` read every dimension from the data or the tensors.
-"""
+The feature dimensions apply only to the PFC ``phase2_fusion`` checkpoint format."""
 from __future__ import annotations
 
 #: Default compute device when neither the CLI nor the config names one.

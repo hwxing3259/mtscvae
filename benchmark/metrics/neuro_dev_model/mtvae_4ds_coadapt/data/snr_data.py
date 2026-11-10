@@ -1,30 +1,4 @@
-"""Unified data loading for the scMultiNODE replication benchmark.
-
-The reference loader ``scMultiNODE_ref/utils/FileUtils.loadSCData`` branches per
-dataset and applies **different preprocessing to different datasets**:
-
-===============  ====================================  =========================
-dataset          RNA                                   ATAC
-===============  ====================================  =========================
-coassay_cortex   none ("already normalized")            none
-human_organoid   normalize_per_cell(1e4) + log1p        none
-drosophila       normalize_per_cell(1e4) + log1p        none (raw/binary peaks)
-mouse_neocortex  normalize_per_cell(1e4) + log1p        astype(float) only
-===============  ====================================  =========================
-
-That asymmetry means a cross-dataset comparison of methods is partly a
-comparison of preprocessing.  This module therefore offers two modes:
-
-``mode="reference"``
-    Byte-compatible with ``loadSCData``, used to reproduce and check the
-    authors' published numbers.
-``mode="harmonised"``
-    One contract applied identically to all four datasets, used for our own
-    benchmark so that a method comparison compares methods.
-
-Both modes return the same :class:`ModalityData` structure, so every downstream
-module is mode-agnostic.
-"""
+"""Unified data loading for the scMultiNODE replication benchmark."""
 from __future__ import annotations
 
 import logging

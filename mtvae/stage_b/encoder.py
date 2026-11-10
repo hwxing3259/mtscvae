@@ -1,16 +1,5 @@
 """The trainable Stage-A encoder path.
-
-:class:`StageAEncoder` wraps the two per-modality trunks and the fusion head
-and computes the Stage-A latent
-
-    z = fusion.posterior(ae.encode(x), modality)[0]
-
-(the posterior mean), so Stage B can fine-tune the encoder.
-:func:`verify_reproduces_stage_a` checks, before Stage B starts, that a rebuilt
-encoder reproduces the Stage-A latent it is anchored to: Stage B moves the
-encoder, and the latent anchor is only meaningful against the right map.
-Checkpoints are read by :mod:`mtvae.stage_b.merged_loader`.
-"""
+:func:`verify_reproduces_stage_a` checks that a rebuilt encoder gives the Stage-A latent."""
 from __future__ import annotations
 
 import logging
