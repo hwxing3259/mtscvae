@@ -109,7 +109,7 @@ traj = model.rollout(OrderedDict(cohort=astro), n_rollouts=5,
 expr = traj["cohort"].per_stage                           # 6 stages x 5,000 genes
 ```
 
-[`tutorials/pfc.ipynb`](tutorials/pfc.ipynb) does this end to end:
+[`tutorials/pfc.ipynb`](tutorials/pfc_seed44.ipynb) does this end to end:
 the latent UMAP of both modalities and the predicted maturation of eight
 astrocyte markers, checked against the paper's numbers.
 
