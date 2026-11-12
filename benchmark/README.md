@@ -85,15 +85,15 @@ python benchmark/score.py $MTVAE_DATA/benchmark/embeddings/HC/*.npz             
 python benchmark/score.py $MTVAE_DATA/benchmark/embeddings/PFC_8k/Ours_s22.npz  # MTVAE_DATA only
 ```
 
-Each embedding is written to `scores/<folder>/<stem>.json` under the current folder
-(`--out-dir` changes it): here `scores/HC/Ours_s0.json` and `scores/PFC_8k/Ours_s22.json`. The
-seven endpoints are top-level keys, next to the scorer's diagnostics. They should equal that fit's
-rows of `benchmark/scores.csv` (`time_corr` to a few 1e-4, see **Exactness** below). For
-`HC/Ours_s0` (dataset `HC`, tier `all`, method `Ours`, seed 0) they are `time_corr` 0.790661,
-`nmi` 0.671504, `batch_entropy` 0.678066, `lta_time` 0.591568, `lta_type` 0.802372,
-`rna_rare_sil` 0.455437 and `atac_rare_sil` 0.379246. Outside the stack of record (below), `nmi`
-can move: with scanpy 1.10.3, igraph 0.11.9 and leidenalg 0.10.2 this example gave 0.673772
-(+0.0023), the graph clustering behind `nmi` being version-dependent, and the other six as above.
+Each embedding is written to `scores/<folder>/<stem>.json` under the current folder (`--out-dir`
+changes it): here `scores/HC/Ours_s0.json` and `scores/PFC_8k/Ours_s22.json`. The seven endpoints
+are top-level keys, next to the scorer's diagnostics. They should equal that fit's rows of
+`benchmark/scores.csv` (`time_corr` to a few 1e-4, see **Exactness** below). For `HC/Ours_s0`
+(dataset `HC`, tier `all`, method `Ours`, seed 0) they are `time_corr` 0.790661, `nmi` 0.671504,
+`batch_entropy` 0.678066, `lta_time` 0.591568, `lta_type` 0.802372, `rna_rare_sil` 0.455437 and
+`atac_rare_sil` 0.379246. Outside those versions (**Environment** below), `nmi` can move: with
+scanpy 1.10.3, igraph 0.11.9 and leidenalg 0.10.2 this example gave 0.673772 (+0.0023), the graph
+clustering behind `nmi` being version-dependent, and the other six as above.
 
 `score.py` runs the scorer of record in a process of its own, with the same command line as the
 published scores. Its stochastic steps are seeded with the fit's seed.
@@ -110,14 +110,13 @@ published scores. Its stochastic steps are seeded with the fit's seed.
 
   It does not read the expression matrices.
 
-**Environment.** Use the scorer's stack of record: Python 3.12, numpy 2.1.2, scipy 1.18.0,
-pandas 3.0.5, scikit-learn 1.9.0, scanpy 1.12.3, anndata 0.13.2, igraph 1.0.0, leidenalg 0.12.0
-and dcor 0.7.
+**Environment.** Use the versions the scores were made with: the main README lists them, and
+`environment.yml` installs them.
 * The published scores were made on Linux. On macOS the scorer can crash in an OpenMP runtime
   clash.
 * Scoring an HO embedding (10,000 cells per modality) takes about 33 GB of memory.
 
-**Exactness.** In the stack of record, six endpoints re-score exactly. `time_corr`, a distance
+**Exactness.** With those versions, six endpoints re-score exactly. `time_corr`, a distance
 correlation over all the cells scored, re-scores only to a few 1e-4 across machines (2.1e-4 seen on
 a PFC embedding). The four-dataset rare-type values of record are kept at 6 dp.
 

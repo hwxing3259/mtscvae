@@ -37,13 +37,23 @@ Paper: *link to be added*.  Data and trained models: figshare, *DOI to be added*
 * Python 3.10 or newer; tested with Python 3.12 (Linux, the GPU fits) and
   Python 3.11 (macOS, the tutorial and figures).
 * torch, numpy, scipy, pandas, scikit-learn, openTSNE, PyYAML. The tutorial also
-  needs umap-learn and matplotlib.
+  needs umap-learn and matplotlib; the benchmark scorer needs scanpy, anndata,
+  igraph, leidenalg and dcor.
 * Training runs on CPU or one NVIDIA GPU. The paper's fits used one GPU; the
   tutorial runs on a laptop CPU.
-* `environment.yml` pins the exact stack the paper's fits were run with (torch
-  2.8.0 + CUDA 12.8, numpy 2.1.2, scipy 1.18.0, scikit-learn 1.9.0, openTSNE
-  1.0.4). Bit-for-bit reproduction needs that stack (see
-  [`reproducibility/`](reproducibility)).
+
+The versions used for the paper, on Linux, are pinned in `environment.yml`:
+
+| used by | packages |
+|---|---|
+| the model | Python 3.12, torch 2.8.0 (CUDA 12.8), numpy 2.1.2, scipy 1.18.0, pandas 3.0.5, scikit-learn 1.9.0, openTSNE 1.0.4, PyYAML 6.0.3 |
+| the benchmark scorer | scanpy 1.12.3, anndata 0.13.2, igraph 1.0.0, leidenalg 0.12.0, dcor 0.7 |
+| the tutorial and figures | umap-learn 0.5.12, matplotlib 3.11.1, jupyter |
+
+Bit-for-bit refits and exact re-scores need these versions (see
+[`reproducibility/`](reproducibility) and [`benchmark/`](benchmark)). Newer
+versions should run, but results can differ slightly: `nmi`, for one, depends on
+the clustering packages.
 
 ### Installation guide
 

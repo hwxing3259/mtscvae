@@ -21,6 +21,7 @@ dependencies = [
 
 [project.optional-dependencies]
 tutorial = ["umap-learn", "matplotlib", "jupyter"]
+benchmark = ["scanpy", "anndata", "igraph", "leidenalg", "dcor"]
 
 [tool.setuptools.packages.find]
 include = ["mtvae*"]
