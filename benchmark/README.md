@@ -50,11 +50,50 @@ which its authors fitted on all cells. Their rows are put into the scorer's row 
 are unchanged, and they are scored like every other embedding. A fit on a subsample would carry
 the suffix `_n<cells>`, and the scorer would re-draw that subsample from the suffix. None ships.
 
-```bash
-export MTVAE_DATA=../figshare
-export SNR_DATA_ROOT=<scMultiNODE data root>   # HC, HO, DR, MN only
-python benchmark/score.py $MTVAE_DATA/benchmark/embeddings/HC/Ours_s0.npz   # writes scores/HC/Ours_s0.json
+**Example: scoring HC and PFC embeddings.** The folder names are an example; any location works.
+Put this repository, our figshare item and scMultiNODE's processed data
+(doi:10.6084/m9.figshare.27420657.v2, one file, `data.zip`) side by side:
+
 ```
+~/work/
+├── mtscvae/                    this repository; run score.py from here
+├── figshare/                   our figshare item: benchmark.zip and data.zip, unzipped here
+│   ├── benchmark/embeddings/HC/Ours_s0.npz, ..., PFC_8k/Ours_s22.npz, ...
+│   └── data/pfc/bench_tiers.npz, rna_metadata.csv, atac_metadata.csv
+└── scmultinode/                scMultiNODE's data.zip, unzipped here (SNR_DATA_ROOT)
+    └── data/
+        ├── human_prefrontal_cortex_multiomic/reduce_processed/    HC
+        │   ├── all-RNA-cell_meta.csv     all-RNA-data-hvg.csv
+        │   └── all-ATAC-cell_meta.csv    all-ATAC-data-hvg.csv
+        ├── human_organoid_Fleck2022/reduce_processed/             HO
+        ├── drosophila_embryonic/reduce_processed/                 DR
+        └── Yuan2022_MouseNeocortex/reduce_processed/              MN
+```
+
+```bash
+cd ~/work
+unzip figshare/benchmark.zip -d figshare          # -> figshare/benchmark/
+unzip figshare/data.zip 'data/pfc/bench_tiers.npz' 'data/pfc/*_metadata.csv' -d figshare
+                                                  # PFC only; the scorer reads just these three
+unzip scmultinode/data.zip -d scmultinode         # -> scmultinode/data/ (24.7 GB unzipped)
+
+cd mtscvae
+export MTVAE_DATA=~/work/figshare
+export SNR_DATA_ROOT=~/work/scmultinode           # the folder that holds data/; HC, HO, DR, MN only
+python benchmark/score.py $MTVAE_DATA/benchmark/embeddings/HC/Ours_s0.npz       # one fit
+python benchmark/score.py $MTVAE_DATA/benchmark/embeddings/HC/*.npz             # every HC fit
+python benchmark/score.py $MTVAE_DATA/benchmark/embeddings/PFC_8k/Ours_s22.npz  # MTVAE_DATA only
+```
+
+Each embedding is written to `scores/<folder>/<stem>.json` under the current folder
+(`--out-dir` changes it): here `scores/HC/Ours_s0.json` and `scores/PFC_8k/Ours_s22.json`. The
+seven endpoints are top-level keys, next to the scorer's diagnostics. They should equal that fit's
+rows of `benchmark/scores.csv` (`time_corr` to a few 1e-4, see **Exactness** below). For
+`HC/Ours_s0` (dataset `HC`, tier `all`, method `Ours`, seed 0) they are `time_corr` 0.790661,
+`nmi` 0.671504, `batch_entropy` 0.678066, `lta_time` 0.591568, `lta_type` 0.802372,
+`rna_rare_sil` 0.455437 and `atac_rare_sil` 0.379246. Outside the stack of record (below), `nmi`
+can move: with scanpy 1.10.3, igraph 0.11.9 and leidenalg 0.10.2 this example gave 0.673772
+(+0.0023), the graph clustering behind `nmi` being version-dependent, and the other six as above.
 
 `score.py` runs the scorer of record in a process of its own, with the same command line as the
 published scores. Its stochastic steps are seeded with the fit's seed.
