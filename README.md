@@ -5,14 +5,11 @@
 and learns how cells move through the shared latent space over time.
 
 * **Stage A** fits one variational autoencoder with modality-specific encoders
-  and decoders and a shared stochastic fusion layer. The two modalities are
-  matched stage by stage with a sliced-Wasserstein term, and each latent space is
-  tilted toward the neighbourhoods of a fixed teacher embedding.
+  and decoders and a shared stochastic fusion layer. 
 * **Stage B** fits a latent neural SDE to the stage-wise cohorts and co-adapts
-  the encoder and decoders with it, held near the Stage-A solution by two anchors
-  and regularised by a path KL term.
+  the encoder and decoders with it.
 
-Flowing early cells through the fitted SDE and decoding them gives predicted
+Propagating cells from initial stage through the fitted SDE and decoding them gives predicted
 trajectories in feature space, for example a gene's expression across
 development.
 
