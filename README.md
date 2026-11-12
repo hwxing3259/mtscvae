@@ -168,7 +168,7 @@ space or decoded to features.
 * **Tutorial.** [`tutorials/pfc_seed44.ipynb`](tutorials/pfc_seed44.ipynb)
   reproduces the PFC latent UMAP and the astrocyte trajectories (seed 44).
 * **Benchmark figure.** [`benchmark/fig2_benchmark.ipynb`](benchmark/fig2_benchmark.ipynb)
-  draws it from the pre-computed scores.
+  draws it, and the same values as a bar grid, from the pre-computed scores.
 * **PFC figure.** [`benchmark/fig3_pfc.ipynb`](benchmark/fig3_pfc.ipynb) draws
   it and Table 1 from the pre-computed values.
 * **Scoring.** [`benchmark/`](benchmark) explains how to re-score any

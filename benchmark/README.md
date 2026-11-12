@@ -15,7 +15,8 @@ benchmark/
 ├── figures/               the figures' CSV-only plot modules, as copies with short module
 │                          docstrings; one legend label of the runtime figure, not drawn here,
 │                          is reworded
-├── fig2_benchmark.ipynb   Fig 2 from figures/fig2_benchmark/
+├── fig2_benchmark.ipynb   Fig 2 (dot plot), and the same values as a bar grid, from
+│                          figures/fig2_benchmark/
 └── fig3_pfc.ipynb         Fig 3 and Table 1 from figures/fig3_pfc/
 ```
 
@@ -96,8 +97,8 @@ rare-type values of record are kept at 6 dp, so they are compared to 5e-7.
 * **`benchmark/scores/rare_type_fourds.csv`** holds the four-dataset rare-type values.
 * **`benchmark/manifest.csv`** lists every embedding and what its rows are.
 
-The means over seeds of `scores.csv` give the bars of Fig 2 (`grid_values.csv`) and of Fig 3a
-(`8k_vs_full_values.csv`).
+The means over seeds of `scores.csv` give the values of Fig 2 (`grid_values.csv`) and the bars of
+Fig 3a (`8k_vs_full_values.csv`).
 
 ## Where the competitor embeddings come from
 
@@ -124,7 +125,7 @@ folder. Each notebook reads only its `figures/` subfolder and draws with the mod
 
 * **The PFC benchmark is in-sample.** Every method is scored on training nuclei of the
   whole-donor split.
-* **Fig 2's PFC column has 3 seeds of ours** and one fit per competitor.
+* **Fig 2's PFC values have 3 seeds of ours** and one fit per competitor.
 * **DR `rna_rare_sil` is not drawn.** Its three rarest RNA types hold 1, 1 and 2 cells. It is
   still in `scores.csv`.
 * **DR `lta_type` is 1.000 for every method.**
