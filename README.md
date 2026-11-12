@@ -16,7 +16,7 @@ Flowing early cells through the fitted SDE and decoding them gives predicted
 trajectories in feature space, for example a gene's expression across
 development.
 
-Paper: *link to be added*.  Data and trained models: figshare, *DOI to be added*.
+Paper: *link to be added*.  Data and trained models: [figshare](https://doi.org/10.6084/m9.figshare.34971253).
 
 ![Method overview](docs/method_overview.png)
 
