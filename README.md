@@ -44,11 +44,23 @@ Paper: *link to be added*.  Data and trained models: figshare, *DOI to be added*
 
 The versions used for the paper, on Linux, are pinned in `environment.yml`:
 
-| used by | packages |
-|---|---|
-| the model | Python 3.12, torch 2.8.0 (CUDA 12.8), numpy 2.1.2, scipy 1.18.0, pandas 3.0.5, scikit-learn 1.9.0, openTSNE 1.0.4, PyYAML 6.0.3 |
-| the benchmark scorer | scanpy 1.12.3, anndata 0.13.2, igraph 1.0.0, leidenalg 0.12.0, dcor 0.7 |
-| the tutorial and figures | umap-learn 0.5.12, matplotlib 3.11.1, jupyter |
+```
+python = 3.12
+torch = 2.8.0 (CUDA 12.8)
+numpy = 2.1.2
+scipy = 1.18.0
+pandas = 3.0.5
+scikit-learn = 1.9.0
+openTSNE = 1.0.4
+PyYAML = 6.0.3
+scanpy = 1.12.3
+anndata = 0.13.2
+igraph = 1.0.0
+leidenalg = 0.12.0
+dcor = 0.7
+umap-learn = 0.5.12
+matplotlib = 3.11.1
+```
 
 Bit-for-bit refits and exact re-scores need these versions (see
 [`reproducibility/`](reproducibility) and [`benchmark/`](benchmark)). Newer
