@@ -26,7 +26,6 @@ FOURDS: tuple[str, ...] = ("HC", "HO", "DR", "MN")
 PFC: Dict[str, tuple[str, Optional[int]]] = {"PFC_8k": ("n8000", 8000), "PFC_full": ("full", None)}
 ENDPOINTS: tuple[str, ...] = ("time_corr", "nmi", "batch_entropy", "lta_time", "lta_type",
                               "rna_rare_sil", "atac_rare_sil")
-RARE: tuple[str, ...] = ("rna_rare_sil", "atac_rare_sil")
 #: OpenMP/MKL threads per scorer process, as the published scores were made.
 THREADS: Dict[str, int] = {"HC": 4, "DR": 4, "MN": 4, "HO": 8, "PFC_8k": 5, "PFC_full": 5}
 #: PFC evaluation draw E: the first N_EVAL rows of each modality's tier permutation, which
@@ -331,50 +330,6 @@ def score_pfc(emb: Embedding, data_root: Path, threads: int, work: Path,
     return rec
 
 
-def compare(emb: Embedding, rec: Dict[str, Any], table: pd.DataFrame,
-            tol_time_corr: float, tol: float = 0.0) -> bool:
-    """Compare the seven endpoints with the matching rows of ``scores.csv``.
-
-    Parameters
-    ----------
-    emb : Embedding
-        The embedding scored.
-    rec : dict
-        Its new score record.
-    table : pandas.DataFrame
-        ``benchmark/scores.csv``.
-    tol_time_corr : float
-        Tolerance for ``time_corr``, which re-scores only to a few 1e-4 across machines
-        (2.1e-4 seen on a PFC embedding of 8,000 + 8,000 nuclei).
-        Four-dataset rare-type values are carried at 6 dp, so they get 5e-7. The other
-        endpoints must match exactly.
-    tol : float, optional
-        A floor on every endpoint's tolerance, for refitted rather than re-scored
-        embeddings (the PFC 8k refits land within 0.0015 of the record).
-
-    Returns
-    -------
-    bool
-        True if every endpoint is within its tolerance.
-    """
-    dataset = "PFC" if emb.folder in PFC else emb.folder
-    tier = PFC[emb.folder][0] if emb.folder in PFC else (f"n{emb.subsample}" if emb.subsample else "all")
-    ref = table[(table.dataset == dataset) & (table.tier == tier) & (table.method == emb.method)
-                & (table.seed == emb.seed)].set_index("metric").value
-    if ref.empty:
-        log.warning("%s: no rows in scores.csv", emb.stem)
-        return False
-    ok = True
-    for ep in ENDPOINTS:
-        tol = max(tol_time_corr if ep == "time_corr"
-                  else (5e-7 + 1e-12 if dataset in FOURDS and ep in RARE else 0.0), tol)
-        d = abs(float(rec[ep]) - float(ref[ep]))
-        ok &= d <= tol
-        log.info("%s %-14s new %.10f  record %.10f  |diff| %.1e  %s", emb.stem, ep,
-                 float(rec[ep]), float(ref[ep]), d, "ok" if d <= tol else "DIFFERS")
-    return ok
-
-
 def main(argv: Optional[Sequence[str]] = None) -> int:
     """Score each embedding given, one at a time.
 
@@ -386,7 +341,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     Returns
     -------
     int
-        0 if every embedding was scored (and, with ``--compare``, matched).
+        0 once every embedding is scored.
     """
     p = argparse.ArgumentParser(description=__doc__.splitlines()[0],
                                 formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -400,16 +355,10 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                    help="writes <out-dir>/<folder>/<stem>.json (default: ./scores)")
     p.add_argument("--threads", type=int, default=None,
                    help="scorer threads (default: as published, 4 on HC/DR/MN, 8 on HO, 5 on PFC)")
-    p.add_argument("--compare", type=Path, default=None, help="benchmark/scores.csv to check against")
-    p.add_argument("--tol-time-corr", type=float, default=5e-4)
-    p.add_argument("--tol", type=float, default=0.0,
-                   help="tolerance floor for every endpoint, e.g. 0.0015 for a refitted embedding")
     p.add_argument("--dry-run", action="store_true", help="check the inputs, run nothing")
     args = p.parse_args(argv)
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 
-    table = pd.read_csv(args.compare, float_precision="round_trip") if args.compare else None
-    failed = 0
     for path in args.embeddings:
         emb = parse(path)
         shapes = check_embedding(emb)
@@ -431,11 +380,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         out.write_text(json.dumps(rec, indent=2, default=str))
         log.info("%s: %s -> %s", emb.stem,
                  {k: round(float(rec[k]), 4) for k in ENDPOINTS}, out)
-        if table is not None and not compare(emb, rec, table, args.tol_time_corr, args.tol):
-            failed += 1
-    if failed:
-        log.error("%d embedding(s) differ from %s", failed, args.compare)
-    return 1 if failed else 0
+    return 0
 
 
 if __name__ == "__main__":

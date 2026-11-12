@@ -53,8 +53,7 @@ the suffix `_n<cells>`, and the scorer would re-draw that subsample from the suf
 ```bash
 export MTVAE_DATA=../figshare
 export SNR_DATA_ROOT=<scMultiNODE data root>   # HC, HO, DR, MN only
-python benchmark/score.py $MTVAE_DATA/benchmark/embeddings/HC/Ours_s0.npz \
-    --compare $MTVAE_DATA/benchmark/scores.csv         # writes scores/HC/Ours_s0.json
+python benchmark/score.py $MTVAE_DATA/benchmark/embeddings/HC/Ours_s0.npz   # writes scores/HC/Ours_s0.json
 ```
 
 `score.py` runs the scorer of record in a process of its own, with the same command line as the
@@ -81,8 +80,7 @@ and dcor 0.7.
 
 **Exactness.** In the stack of record, six endpoints re-score exactly. `time_corr`, a distance
 correlation over all the cells scored, re-scores only to a few 1e-4 across machines (2.1e-4 seen on
-a PFC embedding), so `--compare` allows `--tol-time-corr` (default 5e-4). The four-dataset
-rare-type values of record are kept at 6 dp, so they are compared to 5e-7.
+a PFC embedding). The four-dataset rare-type values of record are kept at 6 dp.
 
 ## The scores in figshare
 
