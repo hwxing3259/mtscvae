@@ -75,7 +75,7 @@ print(pfc.names, [m.x.shape for m in pfc.modalities], pfc.stages)
 ### Define and train the model
 
 One configuration covers both stages and the data handling. `for_example`
-returns the recipe of the paper's fits (path-KL weight `beta_kl = 1e-4`). Any
+returns the recipe of the paper's fits. Any
 field can be overridden, or the whole configuration read from a YAML file with
 `mtvae.load_config`.
 
