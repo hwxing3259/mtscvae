@@ -123,7 +123,7 @@ astrocyte markers, checked against the paper's numbers.
 * `Modality.stage`: an integer stage per cell, in an ordered stage vocabulary;
 * optionally:
   * `teacher`: a cells × k embedding for the neighbourhood tilt (needed when
-    the tilt weight is above 0), e.g. k-dim PCA projections of the data;
+    the tilt weight is above 0), e.g. k-dim PCA projections of the data, used only for neighbourhood preservation;
   * `train`: a training mask;
   * `trunk`: default is `TrunkSpec("mlp")` a dense MLP, alternatively one can set `TrunkSpec("spatial", chr_ids=...)` for a conv head;
 * `Dataset.stage_times`: normalised times of the stages in [0, 1]
